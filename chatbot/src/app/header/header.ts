@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth } from '../auth';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
   constructor(
-    private auth: Auth,
+    public auth: Auth,
     private router: Router,
   ) {}
   logout() {
