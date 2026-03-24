@@ -1,0 +1,37 @@
+.header {
+  background: linear-gradient(90deg, #0f172a, #1e293b); // dark gradient
+  color: #f1f5f9;
+  padding: 14px 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* shared layout */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* left section */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  font-size: 26px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* right section */
+.right {
+  font-size: 14px;
+  opacity: 0.8;
+}

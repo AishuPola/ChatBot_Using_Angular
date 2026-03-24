@@ -1,0 +1,51 @@
+<div class="login-container">
+  <!-- LEFT -->
+  <div class="left">
+    <div class="card">
+      <h2>SIGN IN</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- EMAIL -->
+        <div class="input-group">
+          <input type="email" placeholder="Email address" formControlName="email" />
+
+          <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+            Enter valid email
+          </small>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="input-group password-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            formControlName="password"
+          />
+
+          <!-- 🔥 ICON -->
+          <span class="eye-icon" (click)="togglePassword()">
+            <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+          </span>
+
+          <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+            Password must be at least 6 characters
+          </small>
+        </div>
+
+        <!-- BUTTON (BOTTOM) -->
+        <button type="submit">LOGIN</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="content">
+      <img src="assets/logo.png" class="logo" />
+
+      <h2>Glad to see you!</h2>
+
+      <p>Welcome to Proclink chatbot. Login to continue.</p>
+    </div>
+  </div>
+</div>
