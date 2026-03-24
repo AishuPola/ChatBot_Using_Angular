@@ -1,9 +1,7 @@
 <div class="login-container">
   <!-- LEFT -->
   <div class="left">
-    <div class="card">
-      <h2>SIGN IN</h2>
-
+    <div class="login-card">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- EMAIL -->
         <div class="input-group">
@@ -32,9 +30,21 @@
           </small>
         </div>
 
+        <div class="options">
+          <label> <input type="checkbox" /> Remember me </label>
+          <span class="forgot">Forgot password?</span>
+        </div>
         <!-- BUTTON (BOTTOM) -->
         <button type="submit">LOGIN</button>
       </form>
+      <p class="social-text">Sign in with</p>
+
+      <div class="social-icons">
+        <ion-icon name="logo-facebook"></ion-icon>
+        <ion-icon name="logo-twitter"></ion-icon>
+        <ion-icon name="logo-google"></ion-icon>
+        <ion-icon name="logo-linkedin"></ion-icon>
+      </div>
     </div>
   </div>
 

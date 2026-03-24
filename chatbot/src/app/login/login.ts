@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Router } from '@angular/router';
+import { Auth } from '../auth';
 @Component({
   selector: 'app-login',
 
@@ -11,6 +13,10 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Login {
+  constructor(
+    private router: Router,
+    private auth: Auth,
+  ) {}
   showPassword = false;
 
   loginForm = new FormGroup({
@@ -24,7 +30,8 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      this.auth.login();
+      this.router.navigate(['/chatbot']);
     } else {
       this.loginForm.markAllAsTouched();
     }
