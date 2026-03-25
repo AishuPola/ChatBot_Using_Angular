@@ -14,7 +14,8 @@ export class Header {
     private router: Router,
   ) {}
   logout() {
-    this.auth.logout(); // 🔥 clear login
-    this.router.navigate(['/']); // 🔥 go back to login
+    this.auth.logout();
+    this.router.navigate(['/']);
   }
 }
+

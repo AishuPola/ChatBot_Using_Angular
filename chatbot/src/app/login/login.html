@@ -1,9 +1,7 @@
 <div class="login-container">
-  <!-- LEFT -->
   <div class="left">
     <div class="login-card">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <!-- EMAIL -->
+      <form [formGroup]="loginForm">
         <div class="input-group">
           <input type="email" placeholder="Email address" formControlName="email" />
 
@@ -12,7 +10,6 @@
           </small>
         </div>
 
-        <!-- PASSWORD -->
         <div class="input-group password-group">
           <input
             [type]="showPassword ? 'text' : 'password'"
@@ -20,7 +17,6 @@
             formControlName="password"
           />
 
-          <!-- 🔥 ICON -->
           <span class="eye-icon" (click)="togglePassword()">
             <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
           </span>
@@ -28,27 +24,27 @@
           <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
             Password must be at least 6 characters
           </small>
+          <!-- ng container instead of small -->
         </div>
 
         <div class="options">
           <label> <input type="checkbox" /> Remember me </label>
           <span class="forgot">Forgot password?</span>
         </div>
-        <!-- BUTTON (BOTTOM) -->
-        <button type="submit">LOGIN</button>
+
+        <button (click)="onSubmit()">LOGIN</button>
       </form>
       <p class="social-text">Sign in with</p>
 
       <div class="social-icons">
-        <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
-        <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
-        <a href="#"> <ion-icon name="logo-google"></ion-icon></a>
-        <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
+        <a (click)="openLink('facebook')"><ion-icon name="logo-facebook"></ion-icon></a>
+        <a (click)="openLink('twitter')"><ion-icon name="logo-twitter"></ion-icon></a>
+        <a (click)="openLink('google')"> <ion-icon name="logo-google"></ion-icon></a>
+        <a (click)="openLink('linkedin')"><ion-icon name="logo-linkedin"></ion-icon></a>
       </div>
     </div>
   </div>
 
-  <!-- RIGHT -->
   <div class="right">
     <div class="content">
       <!-- <img src="assets/logo.png" class="logo" /> -->

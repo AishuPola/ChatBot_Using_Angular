@@ -27,6 +27,16 @@ export class Login {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
+  openLink(platform: string) {
+    const links: any = {
+      facebook: 'https://www.facebook.com',
+      twitter: 'https://twitter.com',
+      google: 'https://accounts.google.com',
+      linkedin: 'https://www.linkedin.com',
+    };
+
+    window.open(links[platform], '_blank');
+  }
 
   onSubmit() {
     if (this.loginForm.valid) {

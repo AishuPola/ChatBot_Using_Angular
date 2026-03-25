@@ -1,13 +1,13 @@
 .login-container {
   display: flex;
-  height: calc(100vh - 60px);
+  height: 100%;
+  // height: calc(100vh - 60px);
   // adjust for header
 }
-
 form {
   display: flex;
   flex-direction: column;
-  gap: 18px; // 🔥 controls spacing evenly
+  gap: 18px;
 }
 
 .left {
@@ -16,7 +16,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f8fafc; // light background
+  background: #f8fafc;
 }
 
 .login-card {
@@ -29,7 +29,7 @@ form {
 
   display: flex;
   flex-direction: column;
-  justify-content: center; // 🔥 centers content vertically
+  justify-content: center;
 }
 
 .input-group {
@@ -39,8 +39,8 @@ form {
 input {
   width: 100%;
   padding: 12px 10px;
-  border: none; // ❌ remove black border
-  border-bottom: 1px solid #d1d5db; // ✅ subtle line
+  border: none;
+  border-bottom: 1px solid #d1d5db;
   outline: none;
   background: transparent;
   font-size: 14px;
