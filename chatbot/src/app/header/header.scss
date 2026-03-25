@@ -1,45 +1,43 @@
 .header {
-  background: linear-gradient(90deg, #0f172a, #1e293b); // dark gradient
-  color: #f1f5f9;
+  background: var(--primary);
+  color: var(--white);
   padding: 14px 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  // position: fixed;
 }
 
-/* shared layout */
 .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* left section */
 .left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.icon {
+.logo-icon {
   font-size: 26px;
 }
 
-h2 {
+.title h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
-  letter-spacing: 0.5px;
 }
 
-/* right section */
-.right {
-  font-size: 14px;
-  opacity: 0.8;
+.subtitle {
+  font-size: 12px;
+  opacity: 0.7;
 }
+
 .logout-btn {
-  padding: 6px 12px;
+  background: var(--secondary);
   border: none;
-  background: #ef4444;
-  color: white;
+  padding: 6px 12px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
 }

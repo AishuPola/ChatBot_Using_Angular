@@ -1,23 +1,17 @@
 .footer {
-  background: linear-gradient(90deg, #0f172a, #1e293b); // SAME as header
-  color: #cbd5f5;
+  background: var(--primary);
+  color: #dbeafe;
   padding: 12px 30px;
   margin-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* reuse same container */
 .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* FIXED */
   align-items: center;
 }
 
-.footer .left,
-.footer .right {
-  font-size: 13px;
-  opacity: 0.8;
-}
 .logo {
   height: 40px;
   width: auto;

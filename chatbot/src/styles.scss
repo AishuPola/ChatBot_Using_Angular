@@ -1,5 +1,13 @@
 body {
   margin: 0;
-  //   background-color: #020617; // dark background
+
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+:root {
+  --primary: #0b3c5d; // deep blue (main)
+  --secondary: #1d6fa5; // lighter blue
+  --accent: #4fa3d1; // highlight
+  --light: #f5f9fc; // background
+  --white: #ffffff;
+  --text: #1e293b;
 }
