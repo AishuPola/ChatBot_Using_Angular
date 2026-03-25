@@ -1,13 +1,7 @@
-html,
-body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
 .login-container {
   display: flex;
-  height: calc(100vh - 60px); // adjust for header
-  // overflow: hidden;
+  height: calc(100vh - 60px);
+  // adjust for header
 }
 
 form {
@@ -145,7 +139,7 @@ button:hover {
 
 .right {
   flex: 1;
-  height: 690px;
+  // height: 690px;
 
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   display: flex;
@@ -162,7 +156,7 @@ button:hover {
   width: 80px;
   margin-bottom: 20px;
 }
-html,
-body {
-  height: 100%;
-}
+// html,
+// body {
+//   height: 100%;
+// }
