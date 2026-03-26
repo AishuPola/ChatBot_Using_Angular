@@ -1,8 +1,6 @@
 .login-container {
   display: flex;
   height: 100%;
-  // height: calc(100vh - 60px);
-  // adjust for header
 }
 form {
   display: flex;
@@ -58,11 +56,14 @@ input:focus {
   cursor: pointer;
 }
 
-/* ERROR TEXT */
 small {
   color: red;
   font-size: 12px;
   margin-top: 4px;
+}
+.error {
+  color: red;
+  font-size: 12px;
 }
 
 .options {
@@ -156,7 +157,3 @@ button:hover {
   width: 80px;
   margin-bottom: 20px;
 }
-// html,
-// body {
-//   height: 100%;
-// }

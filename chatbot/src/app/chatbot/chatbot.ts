@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HostListener } from '@angular/core';
 @Component({
   selector: 'app-chatbot',
   imports: [CommonModule, FormsModule],
@@ -35,7 +36,7 @@ export class Chatbot {
           transcript += event.results[i][0].transcript;
         }
 
-        this.userInput = transcript; // 🔥 live text in input
+        this.userInput = transcript; //  live text in input
       };
 
       this.recognition.onend = () => {
@@ -71,6 +72,25 @@ export class Chatbot {
     });
 
     this.userInput = '';
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  handleGlobalEnter(event: Event) {
+    const e = event as KeyboardEvent; // ✅ fix error
+
+    // ❌ do nothing if empty
+    if (!this.userInput || !this.userInput.trim()) return;
+
+    e.preventDefault();
+
+    // 🎤 stop mic if active
+    if (this.isListening) {
+      this.recognition.stop();
+      this.isListening = false;
+    }
+
+    // ✅ send message
+    this.sendMessage();
   }
 
   onFileSelected(event: any) {

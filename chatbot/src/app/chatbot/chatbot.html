@@ -67,10 +67,15 @@
         <!-- hidden file input -->
         <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
 
-        <input
+        <!-- <input
           class="giving-input"
           [(ngModel)]="userInput"
           (keyup.enter)="sendMessage()"
+          [placeholder]="isListening ? 'Listening...' : 'Ask anything'"
+        /> -->
+        <input
+          class="giving-input"
+          [(ngModel)]="userInput"
           [placeholder]="isListening ? 'Listening...' : 'Ask anything'"
         />
 

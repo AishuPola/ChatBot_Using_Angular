@@ -21,9 +21,19 @@
             <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
           </span>
 
-          <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-            Password must be at least 6 characters
-          </small>
+          <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+            <ng-container *ngIf="loginForm.get('password')?.errors?.['required']">
+              <div class="error">Password is required</div>
+            </ng-container>
+
+            <ng-container *ngIf="loginForm.get('password')?.errors?.['minlength']">
+              <div class="error">Must be at least 6 characters</div>
+            </ng-container>
+
+            <ng-container *ngIf="loginForm.get('password')?.errors?.['pattern']">
+              <div class="error">Must contain 1 uppercase & 1 special character</div>
+            </ng-container>
+          </div>
           <!-- ng container instead of small -->
         </div>
 
@@ -47,8 +57,6 @@
 
   <div class="right">
     <div class="content">
-      <!-- <img src="assets/logo.png" class="logo" /> -->
-
       <h2>Glad to see you!</h2>
 
       <p>Welcome to Proclink chatbot. Login to continue.</p>
