@@ -47,7 +47,7 @@ export class Chatbot {
 
   toggleMic() {
     if (!this.isListening) {
-      this.userInput = ''; // 🔥 clears old text
+      this.userInput = ''; //  clears old text
     }
     if (this.isListening) {
       this.recognition.stop();
@@ -78,12 +78,12 @@ export class Chatbot {
   handleGlobalEnter(event: Event) {
     const e = event as KeyboardEvent; // ✅ fix error
 
-    // ❌ do nothing if empty
+    //  do nothing if empty
     if (!this.userInput || !this.userInput.trim()) return;
 
     e.preventDefault();
 
-    // 🎤 stop mic if active
+    //  stop mic if active
     if (this.isListening) {
       this.recognition.stop();
       this.isListening = false;
@@ -108,5 +108,22 @@ export class Chatbot {
       text: 'File received successfully.',
       type: 'bot',
     });
+  }
+
+  startNewChat() {
+    // 🧹 clear messages
+    this.messages = [];
+
+    // 🔄 show center screen again
+    this.showCenter = true;
+
+    // 🧼 clear input
+    this.userInput = '';
+
+    // 🎤 stop mic if running
+    if (this.isListening) {
+      this.recognition.stop();
+      this.isListening = false;
+    }
   }
 }

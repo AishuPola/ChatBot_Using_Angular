@@ -23,9 +23,11 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
+      transition: all 0.2s ease;
 
       &:hover {
-        background: #e2e8f0;
+        background: #e6f2fa; // light blue
+        color: #1d6fa5; // match your header color
       }
     }
 
@@ -63,7 +65,8 @@
         font-size: 14px;
 
         &:hover {
-          background: #e2e8f0;
+          background: #e6f2fa;
+          color: #1d6fa5;
         }
 
         &.active {
