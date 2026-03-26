@@ -20,6 +20,9 @@
 
 .logo-icon {
   font-size: 26px;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 .title h2 {
@@ -33,11 +36,50 @@
   opacity: 0.7;
 }
 
+.right {
+  display: flex;
+  align-items: center;
+}
+// .logout-btn {
+//   background: var(--secondary);
+//   border: none;
+//   padding: 6px 12px;
+//   border-radius: 6px;
+//   color: white;
+//   cursor: pointer;
+// }
+
+// .logout-icon {
+//   width: 20px;
+//   height: 20px;
+// }
+
 .logout-btn {
-  background: var(--secondary);
-  border: none;
-  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px; // space between icon & text
+
+  padding: 8px 14px;
   border-radius: 6px;
-  color: white;
+  border: 1px solid #1d6fa5;
+  background: transparent;
+  color: #1d6fa5;
+  font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  .logout-icon {
+    width: 16px; // 🔥 control icon size
+    height: 16px;
+    object-fit: contain;
+  }
+
+  &:hover {
+    background: #1d6fa5;
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }

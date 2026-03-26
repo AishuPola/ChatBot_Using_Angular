@@ -2,16 +2,117 @@
   display: flex;
   height: 100%;
 
-  .sidebar {
-    width: 10%;
-    background: #1d6fa5;
-    border: 1px solid white;
-    color: white;
-  }
+  //   .sidebar {
+  //     width: 10%;
+  //     background: #1d6fa5;
+  //     border: 1px solid white;
+  //     color: white;
+  //   }
 
+  .sidebar {
+    width: 260px;
+
+    background: #0f172a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 16px;
+
+    .menu-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .menu-item {
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+
+      &:hover {
+        background: #e2e8f0;
+      }
+    }
+
+    .menu-item,
+    .chat-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      ion-icon {
+        font-size: 18px;
+        // color: #475569;
+        color: #cbd5f5;
+      }
+    }
+
+    .logo ion-icon {
+      font-size: 22px;
+    }
+
+    .chat-list {
+      flex: 1;
+      overflow-y: auto;
+
+      .title {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 8px;
+      }
+
+      .chat-item {
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+
+        &:hover {
+          background: #e2e8f0;
+        }
+
+        &.active {
+          background: #e2e8f0;
+        }
+      }
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        background: #366193;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+      }
+
+      .name {
+        font-size: 14px;
+      }
+
+      .plan {
+        font-size: 12px;
+        color: #64748b;
+      }
+    }
+  }
   .chat-area {
     width: 90%;
-    background: #f1f5f9;
+    // background: #f1f5f9;
+    // background-color: #f0f7fc;
+    background: linear-gradient(135deg, #e6f2fa, #f8fbff);
     display: flex;
     flex-direction: column;
 
@@ -135,12 +236,15 @@
   }
 
   .user {
-    background: #e2e8f0;
+    background: #09246d;
+    color: #ffffff;
+
     align-self: flex-end;
   }
 
   .bot {
-    background: #ffffff;
+    background: #dbeafe;
+    color: #1e293b;
     align-self: flex-start;
     border: 1px solid #e2e8f0;
   }

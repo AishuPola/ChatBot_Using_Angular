@@ -2,7 +2,7 @@
   <div class="container">
     <!-- LEFT -->
     <div class="left">
-      <span class="logo-icon">🤖</span>
+      <img src="assets/chatbot.png" class="logo-icon" />
       <div class="title">
         <h2>Proclink Chatbot</h2>
         <span class="subtitle">Smart Assistant</span>
@@ -11,7 +11,10 @@
 
     <!-- RIGHT -->
     <div class="right">
-      <button *ngIf="auth.isAuthenticated()" class="logout-btn" (click)="logout()">Logout</button>
+      <button *ngIf="auth.isAuthenticated()" class="logout-btn" (click)="logout()">
+        <img src="assets/logout.png" class="logout-icon" />
+        <span>Logout</span>
+      </button>
     </div>
   </div>
 </header>

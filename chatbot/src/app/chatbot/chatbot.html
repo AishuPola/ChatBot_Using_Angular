@@ -1,5 +1,54 @@
 <div class="chat-layout">
-  <div class="sidebar">chat sessions</div>
+  <div class="sidebar">
+    <div class="menu-section">
+      <div class="menu-item">
+        <ion-icon name="create-outline"></ion-icon>
+        <span>New chat</span>
+      </div>
+      <div class="menu-item">
+        <ion-icon name="search-outline"></ion-icon>
+        <span>Search chats</span>
+      </div>
+      <div class="menu-item">
+        <ion-icon name="grid-outline"></ion-icon>
+        <span>Apps</span>
+      </div>
+      <div class="menu-item">
+        <ion-icon name="code-slash-outline"></ion-icon>
+        <span>Codex</span>
+      </div>
+      <div class="menu-item"><ion-icon name="cube-outline"></ion-icon> <span>GPTs</span></div>
+      <div class="menu-item"><ion-icon name="folder-outline"></ion-icon> <span>Projects</span></div>
+    </div>
+
+    <!-- CHAT LIST -->
+    <div class="chat-list">
+      <div class="title">Your chats</div>
+
+      <div class="chat-item">
+        <ion-icon name="chatbubble-outline"></ion-icon> <span>Node js</span>
+      </div>
+      <div class="chat-item">
+        <ion-icon name="chatbubble-outline"></ion-icon> <span>Reactive Forms in Angular</span>
+      </div>
+      <div class="chat-item">
+        <ion-icon name="chatbubble-outline"></ion-icon> <span>Different Types of Framework</span>
+      </div>
+      <div class="chat-item">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+        <span>Lazy Loading</span>
+      </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="profile">
+      <div class="avatar">AP</div>
+      <div>
+        <div class="name">aishwarya pola</div>
+        <!-- <div class="plan">Go</div> -->
+      </div>
+    </div>
+  </div>
 
   <div class="chat-area" [ngClass]="{ 'before-chat': showCenter, 'after-chat': !showCenter }">
     <div class="center-screen" *ngIf="showCenter">
