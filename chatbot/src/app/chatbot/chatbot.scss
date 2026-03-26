@@ -11,72 +11,54 @@
 
   .chat-area {
     width: 90%;
-    background: radial-gradient(circle at right, #0b3d2e, #020617);
+    background: #f1f5f9;
     display: flex;
     flex-direction: column;
 
+    position: relative; // ✅ ADDED (required)
+
     .messages {
       height: 95%;
-      position: relative;
-      padding: 10px;
+      padding: 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
     }
 
-    /* CENTER UI */
+    /* CENTER SCREEN */
     .center-screen {
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
 
-    .center-card {
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      color: #e2e8f0;
-      width: 350px;
-    }
+      padding-bottom: 230px; // ✅ CHANGED (was 190px)
 
-    .message {
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 8px;
-      max-width: 60%;
-      color: white;
-    }
-
-    .user {
-      background: #334155;
-      align-self: flex-end;
-    }
-
-    .bot {
-      background: #1e293b;
-      align-self: flex-start;
+      h2 {
+        font-weight: 500;
+        color: #1e293b;
+      }
     }
 
     /* INPUT */
     .input-box {
-      height: 15%;
+      height: 20%;
       display: flex;
-      justify-content: center;
-      align-items: center;
 
       .input-wrapper {
         display: flex;
         align-items: center;
-        height: 40px;
-        width: 50%; // 🔥 NOT full width (as you wanted)
+        height: 40%;
+        width: 50%;
         background: #1e293b;
         border-radius: 25px;
         padding: 0 8px;
       }
 
-      input {
+      // ⚠️ CHANGE input → textarea (for auto grow)
+      .giving-input {
         flex: 1;
         border: none;
         outline: none;
@@ -84,6 +66,10 @@
         color: white;
         padding: 6px;
         font-size: 14px;
+        resize: none;
+        overflow: hidden;
+        min-height: 20px;
+        max-height: 100px;
       }
 
       .icon-btn {
@@ -96,7 +82,7 @@
       }
 
       .send {
-        background: #334155; // ❌ no green
+        background: #334155;
         border: none;
         color: white;
         border-radius: 50%;
@@ -105,5 +91,55 @@
         cursor: pointer;
       }
     }
+
+    /* ✅ ADD THIS BLOCK (before/after chat behavior) */
+    &.before-chat {
+      .input-box {
+        position: absolute;
+        top: 33%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+
+        .input-wrapper {
+          width: 50%;
+          margin: auto;
+        }
+      }
+    }
+
+    &.after-chat {
+      .input-box {
+        position: absolute; // 🔥 key fix
+        top: 85%; // adjust vertical position
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .input-wrapper {
+        width: 50%; // same size as before chat
+      }
+    }
+  }
+
+  .message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    max-width: 60%;
+  }
+
+  .user {
+    background: #e2e8f0;
+    align-self: flex-end;
+  }
+
+  .bot {
+    background: #ffffff;
+    align-self: flex-start;
+    border: 1px solid #e2e8f0;
   }
 }

@@ -1,41 +1,36 @@
 <div class="chat-layout">
   <div class="sidebar">chat sessions</div>
 
-  <div class="chat-area">
-    <!-- Messages -->
-    <div class="messages">
-      <!-- Center UI -->
-      <div class="center-screen" *ngIf="showCenter">
-        <div class="center-card">
-          <h2>How can I help you today?</h2>
-        </div>
-      </div>
+  <div class="chat-area" [ngClass]="{ 'before-chat': showCenter, 'after-chat': !showCenter }">
+    <div class="center-screen" *ngIf="showCenter">
+      <h2>Hey, aishwarya. Ready to dive in?</h2>
+    </div>
 
-      <!-- Chat Messages -->
+    <div class="messages" *ngIf="!showCenter">
       <div *ngFor="let msg of messages" class="message" [ngClass]="msg.type">
         {{ msg.text }}
       </div>
     </div>
 
-    <!-- Input -->
     <div class="input-box">
       <div class="input-wrapper">
-        <!-- + icon -->
-        <button class="icon-btn">+</button>
+        <button class="icon-btn" (click)="fileInput.click()">
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+        </button>
+        <!-- hidden file input -->
+        <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
 
         <input
-          type="text"
+          class="giving-input"
           [(ngModel)]="userInput"
           (keyup.enter)="sendMessage()"
-          placeholder="Ask anything..."
+          placeholder="Ask anything"
         />
 
-        <!-- mic -->
         <button class="icon-btn">
           <ion-icon name="mic-outline"></ion-icon>
         </button>
 
-        <!-- send -->
         <button class="send" (click)="sendMessage()">↵</button>
       </div>
     </div>

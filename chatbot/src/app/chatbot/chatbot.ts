@@ -19,21 +19,32 @@ export class Chatbot {
     const text = this.userInput.trim();
     if (!text) return;
 
-    // hide center screen
     this.showCenter = false;
 
-    // user message
-    this.messages.push({
-      text: text,
-      type: 'user',
-    });
+    this.messages.push({ text, type: 'user' });
 
-    // static bot reply
     this.messages.push({
-      text: 'Hello! This is a static reply.',
+      text: 'Hey! 😊 What can I help you with today?',
       type: 'bot',
     });
 
     this.userInput = '';
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    this.showCenter = false;
+
+    this.messages.push({
+      text: `Uploaded: ${file.name}`,
+      type: 'user',
+    });
+
+    this.messages.push({
+      text: 'File received successfully.',
+      type: 'bot',
+    });
   }
 }
