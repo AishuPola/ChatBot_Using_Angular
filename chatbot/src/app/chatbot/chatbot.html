@@ -24,14 +24,16 @@
           class="giving-input"
           [(ngModel)]="userInput"
           (keyup.enter)="sendMessage()"
-          placeholder="Ask anything"
+          [placeholder]="isListening ? 'Listening...' : 'Ask anything'"
         />
 
-        <button class="icon-btn">
+        <button class="icon-btn mic-btn" [class.listening]="isListening" (click)="toggleMic()">
           <ion-icon name="mic-outline"></ion-icon>
         </button>
 
-        <button class="send" (click)="sendMessage()">↵</button>
+        <button class="send" (click)="sendMessage()">
+          <ion-icon name="enter-outline"></ion-icon>
+        </button>
       </div>
     </div>
   </div>

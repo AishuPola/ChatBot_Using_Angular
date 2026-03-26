@@ -12,8 +12,50 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 export class Chatbot {
   userInput: string = '';
   showCenter: boolean = true;
+  isListening = false;
+  recognition: any;
 
   messages: { text: string; type: 'user' | 'bot' }[] = [];
+
+  ngOnInit() {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      this.recognition = new SpeechRecognition();
+
+      this.recognition.continuous = true;
+      this.recognition.interimResults = true;
+      this.recognition.lang = 'en-US';
+
+      this.recognition.onresult = (event: any) => {
+        let transcript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+
+        this.userInput = transcript; // 🔥 live text in input
+      };
+
+      this.recognition.onend = () => {
+        this.isListening = false;
+      };
+    }
+  }
+
+  toggleMic() {
+    if (!this.isListening) {
+      this.userInput = ''; // 🔥 clears old text
+    }
+    if (this.isListening) {
+      this.recognition.stop();
+      this.isListening = false;
+    } else {
+      this.recognition.start();
+      this.isListening = true;
+    }
+  }
 
   sendMessage() {
     const text = this.userInput.trim();
