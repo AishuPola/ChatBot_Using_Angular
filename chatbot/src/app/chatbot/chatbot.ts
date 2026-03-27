@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HostListener } from '@angular/core';
+
 @Component({
   selector: 'app-chatbot',
   imports: [CommonModule, FormsModule],
@@ -17,6 +18,43 @@ export class Chatbot {
   recognition: any;
 
   messages: { text: string; type: 'user' | 'bot' }[] = [];
+  @ViewChild('chatContainer') chatContainer!: ElementRef; // showing latest messages instead of seeing at after scrolling.
+  //@ view child--is used for
+  //It connects your HTML → TypeScript
+  //It gives you a reference to a specific DOM element, instead of using -->document.querySelector('.messages'), directly we can use this.chatContainer
+
+  // native element:
+  // Converts Angular reference → real DOM element
+  // so that we can use :scrollTop
+  // scrollHeight;
+  //scrollTo();
+  scrollToBottom() {
+    const element = this.chatContainer.nativeElement;
+    //element.scrollTop-->Current scroll position from top
+    // element.scrollHeight-->👉 Total height of ALL content inside the container, includes hidden (overflow) content
+    element.scrollTop = element.scrollHeight; // “Move scroll position to FULL content height”
+  }
+  //@ViewChild → find the element
+  //nativeElement → control the element
+  sendMessage() {
+    const text = this.userInput.trim();
+    if (!text) return;
+
+    this.showCenter = false;
+
+    this.messages.push({ text, type: 'user' });
+
+    this.messages.push({
+      text: 'Hey! 😊 What can I help you with today?',
+      type: 'bot',
+    });
+
+    this.userInput = '';
+
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 0);
+  }
 
   ngOnInit() {
     const SpeechRecognition =
@@ -57,23 +95,6 @@ export class Chatbot {
       this.isListening = true;
     }
   }
-
-  sendMessage() {
-    const text = this.userInput.trim();
-    if (!text) return;
-
-    this.showCenter = false;
-
-    this.messages.push({ text, type: 'user' });
-
-    this.messages.push({
-      text: 'Hey! 😊 What can I help you with today?',
-      type: 'bot',
-    });
-
-    this.userInput = '';
-  }
-
   @HostListener('document:keydown.enter', ['$event'])
   handleGlobalEnter(event: Event) {
     const e = event as KeyboardEvent; // fix error

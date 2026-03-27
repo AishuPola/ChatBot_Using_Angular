@@ -114,7 +114,8 @@
     position: relative;
 
     .messages {
-      height: 95%;
+      // height: 95%;
+      height: 100%;
       padding: 20px;
       overflow-y: auto;
       display: flex;
