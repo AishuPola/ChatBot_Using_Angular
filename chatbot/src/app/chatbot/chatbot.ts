@@ -76,19 +76,24 @@ export class Chatbot {
     this.recognition.interimResults = true;
 
     this.isListening = true;
-    this.cdr.detectChanges(); // 🔥 important
+    this.cdr.detectChanges(); //  important
 
     this.recognition.onresult = (event: any) => {
       let finalText = '';
       let interimText = '';
+      let hasSpeech = false;
 
       for (let i = 0; i < event.results.length; i++) {
         const text = event.results[i][0].transcript;
 
         if (event.results[i].isFinal) {
           finalText += text + ' ';
+          hasSpeech = true;
         } else {
           interimText += text;
+          if (text.trim().length > 2) {
+            hasSpeech = true; // ignore noise
+          }
         }
       }
 
@@ -96,6 +101,14 @@ export class Chatbot {
       this.userInput = finalText + interimText;
 
       this.cdr.detectChanges(); // 🔥 CRITICAL
+
+      if (hasSpeech) {
+        clearTimeout(this.silenceTimer);
+
+        this.silenceTimer = setTimeout(() => {
+          this.stopListening();
+        }, 3000); // ⏱ increase time
+      }
     };
 
     this.recognition.onend = () => {
@@ -124,7 +137,8 @@ export class Chatbot {
     if (this.recognition) {
       this.recognition.stop();
     }
-
+    clearTimeout(this.silenceTimer); // 🔥 important
+    // important
     this.isListening = false;
     this.cdr.detectChanges();
   }
