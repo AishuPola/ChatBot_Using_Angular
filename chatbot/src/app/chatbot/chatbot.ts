@@ -76,7 +76,7 @@ export class Chatbot {
 
   @HostListener('document:keydown.enter', ['$event'])
   handleGlobalEnter(event: Event) {
-    const e = event as KeyboardEvent; // ✅ fix error
+    const e = event as KeyboardEvent; // fix error
 
     //  do nothing if empty
     if (!this.userInput || !this.userInput.trim()) return;
@@ -89,7 +89,7 @@ export class Chatbot {
       this.isListening = false;
     }
 
-    // ✅ send message
+    //  send message
     this.sendMessage();
   }
 
@@ -111,16 +111,16 @@ export class Chatbot {
   }
 
   startNewChat() {
-    // 🧹 clear messages
+    // clear messages
     this.messages = [];
 
-    // 🔄 show center screen again
+    // show center screen again
     this.showCenter = true;
 
-    // 🧼 clear input
+    //  clear input
     this.userInput = '';
 
-    // 🎤 stop mic if running
+    //  stop mic if running
     if (this.isListening) {
       this.recognition.stop();
       this.isListening = false;

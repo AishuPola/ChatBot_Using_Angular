@@ -20,10 +20,14 @@ export class Login {
   showPassword = false;
 
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.pattern(/^[a-zA-Z0-9._%+-]+@proclink\.com$/),
+    ]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(6),
+      Validators.minLength(10),
       Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*]).+$/),
     ]),
   });

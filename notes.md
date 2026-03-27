@@ -754,3 +754,42 @@ using router outlet, the component will be displayed.
 ```js
 <router-outlet></router-outlet>
 ```
+
+# ng-container:
+
+<using small>
+what happebs in browser-->
+<small>Enter valid email</small>
+extra html element is created.
+but using ng-contianer-->extra elements is not created.
+only inner elements are created.
+
+![alt text](image-3.png)
+![alt text](image-4.png)
+
+### “ng-container is invisible. It is ONLY for Angular logic, not UI.”
+
+- ng-container NEVER shows anything on screen
+- It only helps Angular decide what to show
+- ng-container NEVER shows anything on screen. It only helps Angular decide what to show
+
+# Difference between (ngsubmit) and (click):
+
+The core difference is that is a generic HTML event for user clicks on any element, while is an Angular-specific directive that handles the event of a element, which incorporates important form-handling functionalities like validation and accessibility features. [1, 2]  
+Key Differences
+
+| Feature [1, 2, 3, 4, 5, 6, 7, 8, 9] | (or in Angular)                                                                                                                                        |                                                                                                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event Type                          | Handles a generic event.                                                                                                                               | Binds to the HTML event on a form.                                                                                                                         |
+| Applicability                       | Can be used on any HTML element (buttons, divs, links, etc.).                                                                                          | Used specifically on a element.                                                                                                                            |
+| Trigger Methods                     | Only triggers when the element is clicked with a mouse or an equivalent action.                                                                        | Triggers on button click (if ) or when the user presses the key within any form input field.                                                               |
+| Angular Integration                 | A basic event binding; it does not inherently interact with Angular's form validation logic.                                                           | Fully integrates with Angular's form directives (, ), respecting built-in validations (e.g., , ) before the associated function is called.                 |
+| Default Behavior                    | Does not prevent the browser's default action (e.g., a button with might still submit the form in the traditional HTML way if not prevented manually). | In Angular, automatically prevents the default browser form submission (which reloads the page), allowing for single-page application (SPA) functionality. |
+
+When to Use Which:
+
+• Use <b>(ngSubmit)</b> for all form submissions in Angular applications. This is considered the best practice because it provides a better user experience (keyboard accessibility) and leverages Angular's powerful built-in form validation features.  
+• Use <b>(click)</b> (the Angular equivalent of ) for non-form interactions, such as opening a modal, navigating to a different view, or any general button outside of a form whose action is not intended to submit data.
+
+best advantage-->
+Angular automatically prevents full page reload

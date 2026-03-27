@@ -5,9 +5,24 @@
         <div class="input-group">
           <input type="email" placeholder="Email address" formControlName="email" />
 
-          <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-            Enter valid email
-          </small>
+          <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors">
+            <ng-container *ngIf="loginForm.get('email')?.errors?.['required']">
+              <div class="error">Email is required</div>
+            </ng-container>
+            <!-- small creates a dom element, but ng container-> no dom element is created. -->
+            <!-- ng-container disappears after processing -->
+            <!-- Cleaner structure
+            Better readability -->
+            <!-- create logic, without extra element.  -->
+
+            <ng-container *ngIf="loginForm.get('email')?.errors?.['email']">
+              <div class="error">Enter a valid email format</div>
+            </ng-container>
+
+            <ng-container *ngIf="loginForm.get('email')?.errors?.['pattern']">
+              <div class="error">Only @proclink.com emails are allowed</div>
+            </ng-container>
+          </div>
         </div>
 
         <div class="input-group password-group">
@@ -27,7 +42,7 @@
             </ng-container>
 
             <ng-container *ngIf="loginForm.get('password')?.errors?.['minlength']">
-              <div class="error">Must be at least 6 characters</div>
+              <div class="error">Must be at least 10 characters</div>
             </ng-container>
 
             <ng-container *ngIf="loginForm.get('password')?.errors?.['pattern']">
