@@ -2,8 +2,12 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: hidden;
 }
 
 .layout-height {
-  height: 100vh;
+  height: 80%;
+}
+.header-footer-height {
+  height: 10%;
 }
