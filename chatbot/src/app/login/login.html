@@ -24,7 +24,7 @@
             </ng-container>
           </div>
         </div>
-
+        <!-- PASSWORD -->
         <div class="input-group password-group">
           <input
             [type]="showPassword ? 'text' : 'password'"
@@ -50,6 +50,38 @@
             </ng-container>
           </div>
           <!-- ng container instead of small -->
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="input-group password-group">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            placeholder="Confirm Password"
+            formControlName="confirmPassword"
+          />
+
+          <span class="eye-icon" (click)="showConfirmPassword = !showConfirmPassword">
+            <ion-icon [name]="showConfirmPassword ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+          </span>
+
+          <!-- Required -->
+          <div
+            *ngIf="
+              loginForm.get('confirmPassword')?.touched &&
+              loginForm.get('confirmPassword')?.errors?.['required']
+            "
+          >
+            <div class="error">Confirm password is required</div>
+          </div>
+
+          <!-- Match error (FORM LEVEL) -->
+          <div
+            *ngIf="
+              loginForm.get('confirmPassword')?.touched && loginForm.errors?.['passwordMismatch']
+            "
+          >
+            <div class="error">Passwords do not match</div>
+          </div>
         </div>
 
         <div class="options">
