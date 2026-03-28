@@ -58,6 +58,23 @@ export class Chatbot {
       this.scrollToBottom();
     }, 0);
   }
+
+  //covert text to speak
+  speak(text: string) {
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.lang = 'en-US';
+    speech.rate = 1;
+
+    window.speechSynthesis.cancel(); // stop previous
+    window.speechSynthesis.speak(speech);
+  }
+  //copy the bot text
+  copyText(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Copied!');
+    });
+  }
   constructor(private cdr: ChangeDetectorRef) {}
 
   startListening() {
