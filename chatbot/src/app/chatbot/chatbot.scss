@@ -255,6 +255,14 @@
         cursor: pointer;
       }
     }
+
+    .action-icon ion-icon {
+      transition: transform 0.2s ease;
+    }
+
+    .action-icon:active ion-icon {
+      transform: scale(1.2);
+    }
   }
 
   .user {

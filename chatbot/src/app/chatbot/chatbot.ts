@@ -20,7 +20,7 @@ export class Chatbot {
   silenceTimer: any;
   finalTranscript = '';
 
-  messages: { text: string; type: 'user' | 'bot' }[] = [];
+  messages: { text: string; type: 'user' | 'bot'; copied?: boolean }[] = [];
   @ViewChild('chatContainer') chatContainer!: ElementRef; // showing latest messages instead of seeing at after scrolling.
   //@ view child--is used for
   //It connects your HTML → TypeScript
@@ -69,11 +69,19 @@ export class Chatbot {
     window.speechSynthesis.cancel(); // stop previous
     window.speechSynthesis.speak(speech);
   }
-  //copy the bot text
-  copyText(text: string) {
-    navigator.clipboard.writeText(text).then(() => {
-      console.log('Copied!');
-    });
+  //copy the bot text:
+  copyText(msg: any) {
+    // ✅ 1. update UI instantly
+    msg.copied = true;
+
+    // ✅ 2. copy in background (no delay for UI)
+    navigator.clipboard.writeText(msg.text);
+
+    // ✅ 3. reset after 1.5 sec
+    setTimeout(() => {
+      msg.copied = false;
+      this.cdr.detectChanges();
+    }, 2000);
   }
   constructor(private cdr: ChangeDetectorRef) {}
 

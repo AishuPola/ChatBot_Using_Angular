@@ -81,8 +81,8 @@
             <button type="button" class="action-icon" (click)="speak(msg.text)" title="Speak">
               <ion-icon name="volume-high-outline"></ion-icon>
             </button>
-            <button type="button" class="action-icon" (click)="copyText(msg.text)" title="Copy">
-              <ion-icon name="copy-outline"></ion-icon>
+            <button type="button" class="action-icon" (click)="copyText(msg)" title="Copy">
+              <ion-icon [name]="msg.copied ? 'checkmark-outline' : 'copy-outline'"></ion-icon>
             </button>
           </div>
           <span>{{ msg.text }}</span>
