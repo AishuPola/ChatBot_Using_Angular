@@ -1,7 +1,7 @@
 <div class="login-container">
   <div class="left">
     <div class="login-card">
-      <form [formGroup]="loginForm">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="input-group">
           <input type="email" placeholder="Email address" formControlName="email" />
 
@@ -89,7 +89,7 @@
           <span class="forgot">Forgot password?</span>
         </div>
 
-        <button (click)="onSubmit()">LOGIN</button>
+        <button type="submit" [disabled]="loginForm.invalid && loginForm.touched">LOGIN</button>
       </form>
       <p class="social-text">Sign in with</p>
 

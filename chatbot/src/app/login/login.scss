@@ -110,6 +110,10 @@ button {
 button:hover {
   background: var(--primary);
 }
+// button:disabled {
+//   opacity: 0.6;
+//   cursor: not-allowed;
+// }
 .social-text {
   text-align: center;
   margin-top: 15px;

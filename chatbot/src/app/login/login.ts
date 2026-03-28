@@ -71,6 +71,7 @@ export class Login {
   onSubmit() {
     if (this.loginForm.valid) {
       this.auth.login();
+      //  shows all errors
       this.router.navigate(['/chatbot']);
     } else {
       this.loginForm.markAllAsTouched();
