@@ -10,7 +10,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth } from '../auth';
+import { Auth } from '../shared/services/auth';
+import { Api } from '../shared/services/api';
+import { Local } from '../shared/services/local';
+import { LoginRequest } from '../shared/models/login.model';
+import { passwordMatchValidator } from '../shared/validators/password-match.validator';
 @Component({
   selector: 'app-login',
 
@@ -24,33 +28,39 @@ export class Login {
     private router: Router,
     private auth: Auth,
     private fb: FormBuilder,
+    private api: Api,
+    private local: Local,
   ) {}
+
   showPassword = false;
   showConfirmPassword = false;
 
   loginForm = new FormGroup(
     {
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@proclink\.com$/),
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*]).+$/),
-      ]),
-      confirmPassword: new FormControl('', [
-        Validators.required, //  added
-      ]),
+      email: new FormControl('', {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.email,
+          Validators.pattern(/^[a-zA-Z0-9._%+-]+@proclink\.com$/),
+        ],
+      }),
+      password: new FormControl('', {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).+$/),
+        ],
+      }),
+      confirmPassword: new FormControl('', [Validators.required]),
     },
     {
-      validators: (group: AbstractControl) => {
-        const password = group.get('password')?.value;
-        const confirmPassword = group.get('confirmPassword')?.value;
+      //This is the base class for FormControl, FormGroup, and FormArray.
+      // By typing the parameter as AbstractControl,you can access the entire group.
 
-        return password === confirmPassword ? null : { passwordMismatch: true };
-      },
+      //The Group Level: Because you need to compare two different fields, this validator is attached to the FormGroup, not the individual confirmPassword field.
+      validators: passwordMatchValidator,
     },
   );
 
@@ -68,13 +78,39 @@ export class Login {
     window.open(links[platform], '_blank');
   }
 
+  // onSubmit() {
+  //   if (this.loginForm.valid) {
+  //     this.auth.login();
+  //     //  shows all errors
+  //     this.router.navigate(['/chatbot']);
+  //   } else {
+  //     this.loginForm.markAllAsTouched();
+  //   }
+  // }
+
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.auth.login();
-      //  shows all errors
-      this.router.navigate(['/chatbot']);
-    } else {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+    const formValue = this.loginForm.value;
+    // this.auth.login();
+
+    const payload: LoginRequest = {
+      email: formValue.email ?? '',
+      password: formValue.password ?? '',
+    };
+
+    this.api.login(payload).subscribe({
+      next: (res) => {
+        // ✅ store token using local service
+        this.local.set('access_token', res.access_token);
+        console.log('Navigating...'); // 👈 add this
+        this.router.navigate(['/chatbot']);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 }

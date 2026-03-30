@@ -1,0 +1,25 @@
+import { CanActivateFn } from '@angular/router';
+import { Auth } from '../services/auth';
+import { Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { Local } from '../services/local';
+export const authGuard: CanActivateFn = (route, state) => {
+  const auth = inject(Auth);
+  const router = inject(Router);
+  const local = inject(Local);
+
+  // if (auth.isAuthenticated()) {
+  //   return true;
+  // } else {
+  //   router.navigate(['/']);
+  //   return false;
+  // }
+  const token = local.get('access_token');
+  console.log('TOKEN IN GUARD 👉', token);
+  if (token) {
+    return true; // ✅ allow navigation
+  } else {
+    router.navigate(['/']); // 🔁 back to login
+    return false;
+  }
+};

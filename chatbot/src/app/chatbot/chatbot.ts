@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HostListener } from '@angular/core';
 
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core'; //Angular has  a tool called ChangeDetectorRef.
 @Component({
   selector: 'app-chatbot',
   imports: [CommonModule, FormsModule],
@@ -19,8 +19,9 @@ export class Chatbot {
   recognition: any;
   silenceTimer: any;
   finalTranscript = '';
-
+  //To display chat messages dynamically which supports both user and bot messages.
   messages: { text: string; type: 'user' | 'bot'; copied?: boolean }[] = [];
+  constructor(private cdr: ChangeDetectorRef) {}
   @ViewChild('chatContainer') chatContainer!: ElementRef; // showing latest messages instead of seeing at after scrolling.
   //@ view child--is used for
   //It connects your HTML → TypeScript
@@ -40,7 +41,7 @@ export class Chatbot {
   //@ViewChild → find the element
   //nativeElement → control the element
   sendMessage() {
-    const text = this.userInput.trim();
+    const text = this.userInput.trim(); // remove whitespace from both sides of a string
     if (!text) return;
 
     this.showCenter = false;
@@ -60,30 +61,30 @@ export class Chatbot {
   }
 
   //covert text to speak
+  // Uses browser API SpeechSynthesis
   speak(text: string) {
     const speech = new SpeechSynthesisUtterance(text);
 
     speech.lang = 'en-US';
     speech.rate = 1;
 
-    window.speechSynthesis.cancel(); // stop previous
+    window.speechSynthesis.cancel(); // stop  previous speech before new one
     window.speechSynthesis.speak(speech);
   }
   //copy the bot text:
   copyText(msg: any) {
-    // ✅ 1. update UI instantly
+    //  1. update UI instantly
     msg.copied = true;
 
-    // ✅ 2. copy in background (no delay for UI)
+    //  2. copy in background (no delay for UI)
     navigator.clipboard.writeText(msg.text);
 
-    // ✅ 3. reset after 1.5 sec
+    //  3. reset after 1.5 sec
     setTimeout(() => {
       msg.copied = false;
-      this.cdr.detectChanges();
+      this.cdr.detectChanges(); //It lets you manually control UI updates, check the data again and update the UI immediately.
     }, 2000);
   }
-  constructor(private cdr: ChangeDetectorRef) {}
 
   startListening() {
     const SpeechRecognition =
@@ -94,15 +95,16 @@ export class Chatbot {
       return;
     }
 
-    this.recognition = new SpeechRecognition();
+    this.recognition = new SpeechRecognition(); //This creates the speech engine-->Start listening to microphone"
 
     this.recognition.lang = 'en-IN';
-    this.recognition.continuous = true;
-    this.recognition.interimResults = true;
+    this.recognition.continuous = true; //keeps listening continuously
+    this.recognition.interimResults = true; //live typing
 
     this.isListening = true;
-    this.cdr.detectChanges(); //  important
+    this.cdr.detectChanges(); //updates ui
 
+    // This fires whenever speech is detected
     this.recognition.onresult = (event: any) => {
       let finalText = '';
       let interimText = '';
@@ -115,24 +117,24 @@ export class Chatbot {
           finalText += text + ' ';
           hasSpeech = true;
         } else {
-          interimText += text;
+          interimText += text; //Live typing effect
           if (text.trim().length > 2) {
             hasSpeech = true; // ignore noise
           }
         }
       }
 
-      // 🔥 LIVE update
+      //  LIVE update
       this.userInput = finalText + interimText;
 
-      this.cdr.detectChanges(); // 🔥 CRITICAL
+      this.cdr.detectChanges();
 
       if (hasSpeech) {
         clearTimeout(this.silenceTimer);
 
         this.silenceTimer = setTimeout(() => {
           this.stopListening();
-        }, 3000); // ⏱ increase time
+        }, 3000); // If user stops speaking for 3 seconds. Mic auto-stops
       }
     };
 

@@ -73,11 +73,13 @@
     </div>
 
     <!-- MESSAGES -->
+
     <div class="messages" *ngIf="!showCenter" #chatContainer>
       <div *ngFor="let msg of messages" class="message" [ngClass]="msg.type">
         <div class="message-content">
           <div class="actions" *ngIf="msg.type === 'bot'">
             <!--  BOT ACTIONS -->
+            <!-- SpeechSynthesis browser api for converting text into audio -->
             <button type="button" class="action-icon" (click)="speak(msg.text)" title="Speak">
               <ion-icon name="volume-high-outline"></ion-icon>
             </button>
@@ -93,7 +95,7 @@
     <!-- INPUT BOX (ALWAYS OUTSIDE messages) -->
     <div class="input-box">
       <div class="input-wrapper">
-        <!-- 📁 Upload -->
+        <!--  Upload -->
         <button type="button" class="icon-btn" (click)="fileInput.click()">
           <ion-icon name="cloud-upload-outline"></ion-icon>
         </button>
@@ -104,10 +106,10 @@
         <input
           class="giving-input"
           [(ngModel)]="userInput"
-          [placeholder]="isListening ? 'Listening...' : 'Ask anything'"
+          [placeholder]="isListening ? 'Listening...' : 'Ask anything..'"
         />
 
-        <!-- 🎤 Mic -->
+        <!--  Mic -->
         <button
           type="button"
           class="icon-btn mic-btn"
@@ -117,7 +119,7 @@
           <ion-icon name="mic-outline"></ion-icon>
         </button>
 
-        <!-- ➤ Send -->
+        <!-- Send -->
         <button type="button" class="send" (click)="sendMessage()">
           <ion-icon name="enter-outline"></ion-icon>
         </button>

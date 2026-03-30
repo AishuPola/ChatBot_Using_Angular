@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
 import { Login } from './login/login';
 import { Chatbot } from './chatbot/chatbot';
-import { authGuard } from './auth-guard';
+import { authGuard } from './shared/guards/auth-guard';
 export const routes: Routes = [
   {
     path: '',

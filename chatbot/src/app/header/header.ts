@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth } from '../auth';
+import { Auth } from '../shared/services/auth';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-header',
@@ -18,4 +18,3 @@ export class Header {
     this.router.navigate(['/']);
   }
 }
-

@@ -793,3 +793,58 @@ When to Use Which:
 
 best advantage-->
 Angular automatically prevents full page reload
+
+# view child and native element:
+
+1. In Angular, you use @ViewChild and nativeElement to handle scrolling because scrolling is a DOM-level action. While Angular is great at managing data, things like scroll positions, focus, and element measurements belong to the browser's physical layout, which Angular doesn't control directly through typical data binding. [1, 2, 3]
+   Here is the detailed breakdown of why this approach is used for your chatbot:
+1. Direct Access to DOM Properties [4]
+   Angular’s data-binding (like [property]="value") is meant for changing attributes or content. However, to scroll, you need to access specific browser properties that aren't available through standard bindings: [3]
+
+- scrollHeight: The total height of all messages (including those hidden off-screen).
+- scrollTop: The current position of the scroll bar.
+  By using nativeElement, you get a "handle" on the actual HTML <div> so you can manually set scrollTop = scrollHeight whenever a new message arrives. [5, 6]
+
+2. Imperative Control vs. Declarative Binding
+   Angular is "declarative"—you tell it what to show. Scrolling is "imperative"—you tell the browser how to move. [3]
+
+- In a chatbot, when a new message is added to your array, Angular updates the list. But it doesn't automatically know that you want the view to jump to the bottom.
+- @ViewChild provides the "bridge" between your TypeScript logic and the rendered HTML so you can trigger that jump exactly when a new message is received. [3, 7]
+
+3. Timing with Lifecycle Hooks
+   The biggest challenge in chatbots is that you cannot scroll to a message until it actually exists in the DOM.
+
+- If you try to scroll the moment you push a message to your array, the browser might not have finished rendering the new message bubble yet.
+- By using @ViewChild inside the ngAfterViewChecked or ngAfterViewInit lifecycle hooks, you ensure that the message is fully rendered and the scrollHeight is updated before you tell the browser to move the scroll bar. [5, 8, 9, 10]
+
+Exact Use Cases in Your Chatbot:
+
+- Auto-Scroll on Message: Automatically jumping to the bottom when the bot or user sends a message.
+- Smart Scroll: Only scrolling to the bottom if the user is already near the bottom (preventing the view from jumping while the user is reading older messages).
+- Initial Load: Ensuring the chat window starts at the very bottom when the user first opens the chat. [2, 9, 10, 11, 12]
+
+Recommendation: For a modern Angular chatbot, you can use the new viewChild() signal function for a cleaner, more reactive way to get this reference. [3, 13]
+
+angular is declarative-->we tell what to show, but scrolling is broswer level action, how browser movie (imperative), it does not have access directly, so we use native element...via view child.
+
+# custom validators:
+
+```js
+validators: (group: AbstractControl) => {
+  const password = group.get('password')?.value;
+  const confirmPassword = group.get('confirmPassword')?.value;
+
+  // Logic: If they match, return null (All good!)
+  // If they don't match, return the error key.
+  return password === confirmPassword ? null : { passwordMismatch: true };
+}
+```
+
+    //This is the base class for FormControl, FormGroup, and FormArray.
+      // By typing the parameter as AbstractControl,you can access the entire group.
+
+      //The Group Level: Because you need to compare two different fields, this validator is attached to the FormGroup, not the individual confirmPassword field.
+
+```
+
+```
