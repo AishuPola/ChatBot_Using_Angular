@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Layout } from './layout/layout';
+import { Layout } from './shared/components/layout/layout';
 import { Login } from './login/login';
 import { Chatbot } from './chatbot/chatbot';
 import { authGuard } from './shared/guards/auth-guard';

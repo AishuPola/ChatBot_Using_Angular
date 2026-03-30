@@ -845,6 +845,62 @@ validators: (group: AbstractControl) => {
 
       //The Group Level: Because you need to compare two different fields, this validator is attached to the FormGroup, not the individual confirmPassword field.
 
-```
+# APi Integration via backend:
+
+```js
+User → Login Form → Component → API Service → Backend
+                                     ↓
+                              Response (token)
+                                    ↓
+                           Local Storage (token)
+                                    ↓
+                 Interceptor adds token to every request
+                                    ↓
+                             Guard protects routes
+                                    ↓
+                              Header shows Logout
+
 
 ```
+
+1. environment.ts / environment.prod.ts :
+   keep the base url
+
+2. api.service.ts:  
+   place all the api calls
+   It is reusable.
+
+```js
+get<T>()
+post<T>()
+login()
+query()
+```
+
+3. model.ts:  
+   Define request & response structure
+4. local.service.ts  
+   Handle localStorages
+5. auth.service.ts  
+   Handle authentication logic
+
+```js
+isAuthenticated();
+logout();
+```
+
+6. auth-interceptor.service.ts  
+   Attach token to every API request
+
+```js
+Authorization: Bearer token
+```
+
+7. Authorization: Bearer token
+   protect routes.
+
+```js
+if (token) → allow
+else → redirect login
+```
+8. 
