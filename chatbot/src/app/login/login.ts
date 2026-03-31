@@ -35,7 +35,7 @@ export class Login {
 
   showPassword = false;
   showConfirmPassword = false;
-  errorMessage: string = '';
+  errorMessage: string | null = null;
 
   loginForm = new FormGroup(
     {
@@ -134,7 +134,10 @@ export class Login {
     try {
       //  Convert Observable → Promise
       const res = await firstValueFrom(this.api.login(payload));
-
+      if (!res?.access_token) {
+        this.errorMessage = 'Invalid credentials';
+        return;
+      }
       // store token
       this.local.set('access_token', res.access_token);
 
@@ -143,13 +146,7 @@ export class Login {
     } catch (err: any) {
       console.error(err);
 
-      if (err.status === 401) {
-        this.errorMessage = 'Invalid email or password';
-      } else if (err.status === 500) {
-        this.errorMessage = 'Server error. Try again later.';
-      } else {
-        this.errorMessage = 'Something went wrong';
-      }
+      this.errorMessage = 'Login failed, please try again later';
     }
   }
 }
