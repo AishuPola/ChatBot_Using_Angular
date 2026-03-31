@@ -2,6 +2,10 @@
   <div class="left">
     <div class="login-card">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- 🔥 GLOBAL ERROR MESSAGE -->
+        <div *ngIf="errorMessage" class="error-box">
+          {{ errorMessage }}
+        </div>
         <div class="input-group">
           <input type="email" placeholder="Email address" formControlName="email" />
 

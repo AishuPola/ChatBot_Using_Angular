@@ -141,7 +141,13 @@ button:hover {
   font-size: 20px;
   cursor: pointer;
 }
-
+.error-box {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
 .right {
   flex: 1;
   // height: 690px;

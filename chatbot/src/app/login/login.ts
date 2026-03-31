@@ -15,6 +15,7 @@ import { Api } from '../shared/services/api';
 import { Local } from '../shared/services/local';
 import { LoginRequest } from '../shared/models/login.model';
 import { passwordMatchValidator } from '../shared/validators/password-match.validator';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-login',
 
@@ -34,6 +35,7 @@ export class Login {
 
   showPassword = false;
   showConfirmPassword = false;
+  errorMessage: string = '';
 
   loginForm = new FormGroup(
     {
@@ -87,30 +89,67 @@ export class Login {
   //     this.loginForm.markAllAsTouched();
   //   }
   // }
+  //change to async and await-->try catch blocks
+  // onSubmit() {
+  //   if (this.loginForm.invalid) {
+  //     this.loginForm.markAllAsTouched();
+  //     return;
+  //   }
+  //   const formValue = this.loginForm.value; //absolute value assignment-->why?
+  //   // this.auth.login();
 
-  onSubmit() {
+  //   const payload: LoginRequest = {
+  //     email: formValue.email ?? '',
+  //     password: formValue.password ?? '',
+  //   };
+
+  //   this.api.login(payload).subscribe({
+  //     next: (res) => {
+  //       //  store token using local service
+  //       this.local.set('access_token', res.access_token);
+  //       // console.log('Navigating...');
+  //       this.router.navigate(['/chatbot']);
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //     },
+  //   });
+  // }
+
+  //Observable → Promise
+  async onSubmit() {
+    this.errorMessage = '';
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
+
     const formValue = this.loginForm.value;
-    // this.auth.login();
 
     const payload: LoginRequest = {
       email: formValue.email ?? '',
       password: formValue.password ?? '',
     };
 
-    this.api.login(payload).subscribe({
-      next: (res) => {
-        // ✅ store token using local service
-        this.local.set('access_token', res.access_token);
-        console.log('Navigating...'); // 👈 add this
-        this.router.navigate(['/chatbot']);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+    try {
+      //  Convert Observable → Promise
+      const res = await firstValueFrom(this.api.login(payload));
+
+      // store token
+      this.local.set('access_token', res.access_token);
+
+      //  navigate
+      this.router.navigate(['/chatbot']);
+    } catch (err: any) {
+      console.error(err);
+
+      if (err.status === 401) {
+        this.errorMessage = 'Invalid email or password';
+      } else if (err.status === 500) {
+        this.errorMessage = 'Server error. Try again later.';
+      } else {
+        this.errorMessage = 'Something went wrong';
+      }
+    }
   }
 }
