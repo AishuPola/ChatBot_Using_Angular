@@ -2,10 +2,13 @@
   <div class="header-footer-height">
     <app-header></app-header>
   </div>
-
+  <!-- <div class="navbar">
+    <app-navbar *ngIf="auth.isAuthenticated()"></app-navbar>
+  </div> -->
   <div class="layout-height">
     <router-outlet></router-outlet>
   </div>
+
   <div class="header-footer-height">
     <app-footer></app-footer>
   </div>

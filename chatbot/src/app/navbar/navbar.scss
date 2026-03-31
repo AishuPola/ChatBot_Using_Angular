@@ -1,0 +1,30 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e293b;
+  color: white;
+  padding: 10px 20px;
+}
+
+.left h2 {
+  margin: 0;
+}
+
+.right {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-btn {
+  background: #334155;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  background: #475569;
+}
