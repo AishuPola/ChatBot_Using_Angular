@@ -903,4 +903,89 @@ Authorization: Bearer token
 if (token) → allow
 else → redirect login
 ```
-8. 
+
+```js
+Login Form → onSubmit() → ApiService → Backend
+                         ↓
+                    Response (token)
+                         ↓
+                 LocalService (store)
+                         ↓
+Router → /chatbot
+                         ↓
+AuthGuard (checks token)
+                         ↓
+Interceptor (adds token to APIs)
+                         ↓
+Header/AuthService (shows logout)
+```
+
+1. # model.ts (The Contract)
+   This file defines the Interfaces. In a 15-year dev's world, this is the "Source of Truth."
+
+What's happening: It ensures that every part of your app knows exactly what a Login request looks like (email/password) and what the server will send back (access_token).
+
+Role: It provides Type Safety. If you accidentally type pass_word instead of password in your service, TypeScript will catch it before you even run the code.
+
+2. # local.service.ts (The Vault)
+   This is a wrapper around the browser's localStorage.
+
+What's happening: It provides helper methods to set, get, and remove data.
+
+The "Pro" Touch: Notice the JSON.stringify and JSON.parse. LocalStorage can only store strings. This service makes it so you can pass objects or arrays into it without manually converting them every time.
+
+Role: It is the Persistence Layer. It makes sure your token stays in the browser even if the user refreshes the page.
+
+3. # api.service.ts (The Messenger)
+   This is your gateway to the backend.
+
+What's happening: Instead of calling http.post everywhere in your app, you’ve centralized it. The login() method specifically uses the LoginRequest and LoginResponse interfaces from your model.
+
+The "Pro" Touch: You used Generics (<T>). This means this service is reusable for any data type, making it very dry (Don't Repeat Yourself).
+
+Role: It is the Data Access Layer.
+
+4. # auth.interceptor.ts (The Invisible Guard)
+   This is a "Middle-man" for every single HTTP request your app makes.
+
+What's happening: 1. It "intercepts" a request before it leaves the browser. 2. It checks: "Is this a login request?" If yes, it lets it through (because you don't have a token yet). 3. If it's any other request (like fetching chat history), it grabs the token from the Local service. 4. It clones the request and attaches the Authorization: Bearer <token> header.
+
+Role: It handles Global Security so you don't have to manually add headers to every single API call.
+
+5.  # auth.service.ts (The Logic/State)
+    This service answers the question: "Is the user currently logged in?"
+
+What's happening: \* isAuthenticated(): It checks the Local service for a token. The !! (double bang) converts a "truthy" value (the token string) into a boolean true.
+
+logout(): It wipes the storage clean.
+
+Role: It is the Identity Provider for your application's guards and UI components.
+
+6. # onSubmit() in Component (The Conductor)
+   This is where the orchestra starts playing. Let’s trace the flow:
+
+Validation: It checks loginForm.invalid. If you missed a field, it stops right there.
+
+Payload: It gathers the form data and shapes it into a LoginRequest.
+
+The Call: It calls api.login(payload).
+
+The Subscription: \* The Service sends the HTTP request.
+
+The Interceptor sees it’s a "login" URL and lets it pass without a header.
+
+The Server returns a token.
+
+next(res) triggers: The token is saved into Local service.
+
+Navigation: Once the token is safe, it tells the Router to take the user to the /chatbot page.
+
+# Total flow:
+
+How they connect (The Flow):User clicks Submit --> Component (onSubmit).  
+Component calls API Service (login).  
+API Service calls Interceptor.  
+Interceptor lets request go to Backend.Backend returns Token --> Component receives it.  
+Component saves Token to Local Service.  
+Auth Service now sees isAuthenticated() as true.  
+Component navigates to Chat.

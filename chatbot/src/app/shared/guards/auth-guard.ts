@@ -14,12 +14,21 @@ export const authGuard: CanActivateFn = (route, state) => {
   //   router.navigate(['/']);
   //   return false;
   // }
-  const token = local.get('access_token');
-  console.log('TOKEN IN GUARD 👉', token);
-  if (token) {
-    return true; // ✅ allow navigation
+  // const token = local.get('access_token');
+  // console.log('TOKEN IN GUARD 👉', token);
+  // if (token) {
+  //   return true; //  allow navigation
+  // } else {
+  //   router.navigate(['/']); //  back to login
+  //   return false;
+  // }
+
+  // Use the method you already wrote in your Auth service!
+  if (auth.isAuthenticated()) {
+    return true; //  Token exists, let them pass
   } else {
-    router.navigate(['/']); // 🔁 back to login
-    return false;
+    console.warn('Access Denied: Redirecting to Login...');
+    router.navigate(['/']); //  Redirect to login page
+    return false; //  Block navigation
   }
 };

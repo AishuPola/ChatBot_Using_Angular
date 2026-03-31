@@ -6,7 +6,7 @@ import { authGuard } from './shared/guards/auth-guard';
 export const routes: Routes = [
   {
     path: '',
-    component: Layout, // 🔥 shared wrapper
+    component: Layout, //  shared wrapper
     children: [
       { path: '', component: Login }, // Page 1
       { path: 'chatbot', component: Chatbot, canActivate: [authGuard] }, // Page 2
