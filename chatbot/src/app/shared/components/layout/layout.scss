@@ -1,20 +1,26 @@
 .layout {
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
+  height: 100vh;
+  overflow: hidden; /* Keeps the app from having a double scrollbar */
 }
 
-// .navbar {
-//   height: 8%;
-// }
-
-.layout-height {
-  // height: 80%;
-  height: 80%;
-  // min-height: 0;
-}
+/* Header and Footer take exactly 10% or a fixed height */
 .header-footer-height {
-  height: 10%;
-  // overflow: auto;
+  flex: 0 0 10%;
+  min-height: 60px; /* Safety: don't let it get too small */
+}
+
+/* Navbar: Takes only the space it needs */
+.navbar-container {
+  flex: 0 0 auto;
+  background-color: #f1f1f1; /* Temporary color to verify it's visible */
+  border-bottom: 1px solid #ccc;
+  z-index: 100;
+}
+
+/* Main Content: This fills EVERYTHING ELSE */
+.main-content {
+  flex: 1;
+  overflow-y: auto; /* This allows the chatbot/user management to scroll internally */
 }

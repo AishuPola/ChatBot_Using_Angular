@@ -1,15 +1,17 @@
 <div class="layout">
-  <div class="header-footer-height">
+  <header class="header-footer-height">
     <app-header></app-header>
-  </div>
-  <!-- <div class="navbar">
-    <app-navbar *ngIf="auth.isAuthenticated()"></app-navbar>
-  </div> -->
-  <div class="layout-height">
-    <router-outlet></router-outlet>
-  </div>
+  </header>
 
-  <div class="header-footer-height">
+  <nav class="navbar-container" *ngIf="auth.isAuthenticated$ | async">
+    <app-navbar></app-navbar>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="header-footer-height">
     <app-footer></app-footer>
-  </div>
+  </footer>
 </div>

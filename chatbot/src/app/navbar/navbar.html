@@ -1,10 +1,28 @@
-<header class="navbar">
-  <div class="left">
-    <h2>Proclink</h2>
+<div class="nav-container">
+  <!-- 🔙 Back to Chat -->
+  <div class="nav-left" [ngClass]="{ 'hide-back': isChatPage() }" routerLink="/chatbot">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+    <span>Back to Chat</span>
   </div>
 
-  <div class="right">
-    <button class="nav-btn">User Management</button>
-    <button class="nav-btn">Document Management</button>
+  <!-- 🔘 Right Buttons -->
+  <div class="nav-actions">
+    <button
+      class="nav-btn"
+      routerLink="/user-management"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      User Management
+    </button>
+
+    <button
+      class="nav-btn"
+      routerLink="/document-management"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Document Management
+    </button>
   </div>
-</header>
+</div>

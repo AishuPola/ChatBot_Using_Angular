@@ -6,6 +6,14 @@ import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse } from '../models/login.model';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+
+import {
+  CreateUserRequest,
+  CreateUserResponse,
+  ListUsersResponse,
+  DeleteUserResponse,
+} from '../models/user.model';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -36,12 +44,28 @@ export class Api {
     );
   }
 
+  // delete<T>(url: string) {
+  //   return this.http.delete<T>(`${this.baseUrl}${url}`).pipe(
+  //     catchError((err) => {
+  //       console.error('DELETE Error:', err);
+  //       return throwError(() => err);
+  //     }),
+  //   );
+  // }
+
   login(data: LoginRequest) {
     return this.post<LoginResponse>('login', data);
-  }// after this 
+  } // after this
 
-  // Query API (chat)
-  // query(data: { query: string }) {
-  //   return this.post<any>('query', data);
+  createUser(data: CreateUserRequest) {
+    return this.post<CreateUserResponse>('api/user-management/create', data);
+  }
+  listUsers() {
+    return this.get<ListUsersResponse>('api/list-users');
+  }
+
+  //  Delete User API
+  // deleteUser(userId: string) {
+  //   return this.delete<DeleteUserResponse>(`api/user-management/user/id/${userId}`);
   // }
 }

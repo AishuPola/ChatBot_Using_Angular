@@ -138,6 +138,8 @@ export class Login {
         this.errorMessage = 'Invalid credentials';
         return;
       }
+      //STORE TOKEN + UPDATE AUTH STATE
+      this.auth.login(res.access_token);
       // store token
       this.local.set('access_token', res.access_token);
 
