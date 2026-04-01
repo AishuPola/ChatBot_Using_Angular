@@ -44,14 +44,14 @@ export class Api {
     );
   }
 
-  // delete<T>(url: string) {
-  //   return this.http.delete<T>(`${this.baseUrl}${url}`).pipe(
-  //     catchError((err) => {
-  //       console.error('DELETE Error:', err);
-  //       return throwError(() => err);
-  //     }),
-  //   );
-  // }
+  delete<T>(url: string) {
+    return this.http.delete<T>(`${this.baseUrl}${url}`).pipe(
+      catchError((err) => {
+        console.error('DELETE Error:', err);
+        return throwError(() => err);
+      }),
+    );
+  }
 
   login(data: LoginRequest) {
     return this.post<LoginResponse>('login', data);

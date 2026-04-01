@@ -50,6 +50,7 @@ export class UserManagement implements OnInit {
   async ngOnInit() {
     console.log('UserManagement Loaded');
     await this.loadUsers();
+    this.cdr.detectChanges();
   }
 
   async loadUsers() {
@@ -59,12 +60,27 @@ export class UserManagement implements OnInit {
       console.log('Users API:', res);
 
       this.users = res.users;
-      this.cdr.detectChanges();
     } catch (error) {
       console.error('Failed to load users:', error);
-      alert('Failed to load users');
+      // alert('Failed to load users');
     }
   }
+
+  // async loadUsers() {
+  //   try {
+  //     const res: ListUsersResponse = await firstValueFrom(this.api.listUsers());
+  //     console.log('Users API Response:', res);
+
+  //     // Update the array
+  //     this.users = [...res.users]; // Use spread operator to ensure a new reference
+
+  //     // FORCE UI Update
+  //     this.cdr.detectChanges();
+  //   } catch (error) {
+  //     console.error('Failed to load users:', error);
+  //     alert('Failed to load users');
+  //   }
+  // }
   openModal() {
     this.showModal = true;
   }
@@ -73,26 +89,105 @@ export class UserManagement implements OnInit {
     this.showModal = false;
   }
 
+  // async createUser() {
+  //   try {
+  //     const payload: CreateUserRequest = {
+  //       username: this.newUser.username,
+  //       email: this.newUser.email,
+  //       password: this.newUser.password,
+  //       role: this.newUser.role,
+  //     };
+
+  //     // 🔥 API CALL FIRST
+  //     const res: CreateUserResponse = await firstValueFrom(this.api.createUser(payload));
+
+  //     console.log('Create response:', res);
+
+  //     // ✅ Store role
+  //     this.local.set('role', res.user.role);
+
+  //     // ✅ Close modal
+  //     //this.closeModal();
+
+  //     // ✅ Reset form
+  //     this.newUser = {
+  //       username: '',
+  //       email: '',
+  //       password: '',
+  //       role: 'user',
+  //     };
+
+  //     // 🔥 RELOAD USERS (IMPORTANT)
+  //     await this.loadUsers();
+  //     this.closeModal();
+  //   } catch (error: any) {
+  //     console.error('Create user failed:', error);
+
+  //     // show backend error if exists
+  //     alert(error?.error?.message || 'Failed to create user');
+  //   }
+  // }
+
+  // async createUser() {
+  //   try {
+  //     const payload: CreateUserRequest = {
+  //       username: this.newUser.username,
+  //       email: this.newUser.email,
+  //       password: this.newUser.password,
+  //       role: this.newUser.role,
+  //     };
+
+  //     // ✅ CREATE API
+  //     const res: CreateUserResponse = await firstValueFrom(this.api.createUser(payload));
+
+  //     console.log('Create response:', res);
+
+  //     // ✅ Store role
+  //     this.local.set('role', res.user.role);
+
+  //     // ✅ Reset form
+  //     this.newUser = {
+  //       username: '',
+  //       email: '',
+  //       password: '',
+  //       role: 'user',
+  //     };
+
+  //     // ✅ Close modal
+  //     this.closeModal();
+
+  //     // 🔥 SEPARATE TRY for loadUsers
+  //     try {
+  //       await this.loadUsers();
+  //     } catch (loadError) {
+  //       console.error('Load users failed:', loadError);
+  //     }
+  //   } catch (error: any) {
+  //     console.error('Create user failed:', error);
+  //     alert(error?.error?.message || 'Failed to create user');
+  //   }
+  // }
+
   async createUser() {
     try {
-      await this.loadUsers();
       const payload: CreateUserRequest = {
         username: this.newUser.username,
         email: this.newUser.email,
         password: this.newUser.password,
         role: this.newUser.role,
       };
-      //  Reload users from backend
 
-      //  API CALL
+      // 1. Call API
       const res: CreateUserResponse = await firstValueFrom(this.api.createUser(payload));
-      // ✅ Store role in localStorage
-      this.local.set('role', res.user.role);
+      console.log('Create response:', res);
 
-      // ✅ Add user to table (from response)
-      this.users.push(res.user);
+      // 2. Safety Check: Only store role if res.user exists
+      if (res?.user) {
+        this.local.set('role', res.user.role);
+        this.local.set('userId', res.user.id);
+      }
 
-      // ✅ Reset form
+      // 3. Reset form
       this.newUser = {
         username: '',
         email: '',
@@ -100,10 +195,23 @@ export class UserManagement implements OnInit {
         role: 'user',
       };
 
+      // 4. Close modal and Refresh table
       this.closeModal();
-    } catch (error) {
+
+      try {
+        await this.loadUsers();
+        this.cdr.detectChanges();
+      } catch (loadErr) {
+        console.error('Load users failed:', loadErr);
+      }
+      //await this.loadUsers(); // Refresh the list
+
+      // Optional: Show success message instead of nothing
+      console.log('User created and list refreshed');
+    } catch (error: any) {
       console.error('Create user failed:', error);
-      alert('Failed to create user');
+      // This alert triggers if the API fails OR if your code above crashes
+      alert(error?.error?.message || 'Failed to create user');
     }
   }
 }
