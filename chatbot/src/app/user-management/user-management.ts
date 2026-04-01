@@ -38,6 +38,10 @@ export class UserManagement implements OnInit {
   users: User[] = [];
   showDeleteConfirm: boolean = false;
   userIdToDelete: string | null = null;
+  deleteErrorMessage: string = '';
+  isDeleting: boolean = false;
+  createErrorMessage: string = '';
+  isCreating: boolean = false;
 
   newUser: CreateUserRequest = {
     username: '',
@@ -85,6 +89,7 @@ export class UserManagement implements OnInit {
   // }
   openModal() {
     this.showModal = true;
+    this.createErrorMessage = '';
   }
 
   closeModal() {
@@ -172,6 +177,16 @@ export class UserManagement implements OnInit {
 
   async createUser() {
     try {
+      this.createErrorMessage = ''; // 🔥 reset
+      this.isCreating = true;
+      const userExists = this.users.some(
+        (user) => user.username === this.newUser.username || user.email === this.newUser.email,
+      );
+      if (userExists) {
+        this.createErrorMessage = 'User already exists with same username or email';
+        this.isCreating = false;
+        return;
+      }
       const payload: CreateUserRequest = {
         username: this.newUser.username,
         email: this.newUser.email,
@@ -200,25 +215,25 @@ export class UserManagement implements OnInit {
       // 4. Close modal and Refresh table
       this.closeModal();
 
-      try {
-        await this.loadUsers();
-        this.cdr.detectChanges();
-      } catch (loadErr) {
-        console.error('Load users failed:', loadErr);
-      }
+      await this.loadUsers();
+      this.cdr.detectChanges();
+
       //await this.loadUsers(); // Refresh the list
 
       // Optional: Show success message instead of nothing
-      console.log('User created and list refreshed');
+      //console.log('User created and list refreshed');
     } catch (error: any) {
       console.error('Create user failed:', error);
       // This alert triggers if the API fails OR if your code above crashes
-      alert(error?.error?.message || 'Failed to create user');
+      this.createErrorMessage = error?.error?.message || 'Failed to create user';
+    } finally {
+      this.isCreating = false;
     }
   }
   deleteUser(id: string) {
     this.userIdToDelete = id;
     this.showDeleteConfirm = true;
+    this.deleteErrorMessage = '';
   }
   cancelDelete() {
     this.showDeleteConfirm = false;
@@ -229,6 +244,8 @@ export class UserManagement implements OnInit {
     if (!this.userIdToDelete) return;
 
     const id = this.userIdToDelete;
+    this.deleteErrorMessage = ''; //  clear old error
+    this.isDeleting = true;
     console.log('Deleting user with ID:', id);
     // const url = `/api/user-management/user/id/${id}`;
 
@@ -244,8 +261,10 @@ export class UserManagement implements OnInit {
       // await this.loadUsers();
     } catch (err: any) {
       console.error('Error deleting user:', err);
-      alert(err?.error?.message || 'Failed to delete user');
+      //  SHOW ERROR IN POPUP
+      this.deleteErrorMessage = err?.error?.message || 'Failed to delete user';
     } finally {
+      this.isDeleting = false;
       this.userIdToDelete = null;
     }
   }

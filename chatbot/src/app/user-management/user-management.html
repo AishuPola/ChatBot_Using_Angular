@@ -55,10 +55,15 @@
       <option value="user">User</option>
       <option value="admin">Admin</option>
     </select>
+    <p class="error-msg" *ngIf="createErrorMessage">
+      {{ createErrorMessage }}
+    </p>
 
     <div class="modal-actions">
       <button (click)="closeModal()">Cancel</button>
-      <button class="save" (click)="createUser()">Create</button>
+      <button class="save" (click)="createUser()" [disabled]="isCreating">
+        {{ isCreating ? 'Creating...' : 'Create' }}
+      </button>
     </div>
   </div>
 </div>
@@ -68,16 +73,23 @@
 <!-- 🔥 DELETE CONFIRM MODAL -->
 <div class="modal" *ngIf="showDeleteConfirm">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <!-- ❌ Close icon -->
+    <!--  Close icon -->
     <span class="close" (click)="cancelDelete()">×</span>
 
     <h3>Confirm Delete</h3>
 
     <p>Are you sure you want to delete this user?</p>
 
+    <!-- ERROR MESSAGE -->
+    <p class="error-msg" *ngIf="deleteErrorMessage">
+      {{ deleteErrorMessage }}
+    </p>
+
     <div class="modal-actions">
       <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
-      <button class="delete-btn" (click)="confirmDelete()">Delete</button>
+      <button class="delete-btn" (click)="confirmDelete()" [disabled]="isDeleting">
+        {{ isDeleting ? 'Deleting...' : 'Delete' }}
+      </button>
     </div>
   </div>
 </div>
