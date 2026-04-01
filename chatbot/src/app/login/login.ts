@@ -33,11 +33,11 @@ export class Login {
     private local: Local,
   ) {}
 
-  showPassword = false;
-  showConfirmPassword = false;
-  errorMessage: string | null = null;
+  public showPassword = false;
+  public showConfirmPassword = false;
+  public errorMessage: string | null = null;
 
-  loginForm = new FormGroup(
+  public loginForm: FormGroup = new FormGroup(
     {
       email: new FormControl('', {
         nonNullable: true,
@@ -66,10 +66,10 @@ export class Login {
     },
   );
 
-  togglePassword() {
+  public togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
-  openLink(platform: string) {
+  public openLink(platform: string): void {
     const links: any = {
       facebook: 'https://www.facebook.com',
       twitter: 'https://twitter.com',
@@ -80,44 +80,8 @@ export class Login {
     window.open(links[platform], '_blank');
   }
 
-  // onSubmit() {
-  //   if (this.loginForm.valid) {
-  //     this.auth.login();
-  //     //  shows all errors
-  //     this.router.navigate(['/chatbot']);
-  //   } else {
-  //     this.loginForm.markAllAsTouched();
-  //   }
-  // }
-  //change to async and await-->try catch blocks
-  // onSubmit() {
-  //   if (this.loginForm.invalid) {
-  //     this.loginForm.markAllAsTouched();
-  //     return;
-  //   }
-  //   const formValue = this.loginForm.value; //absolute value assignment-->why?
-  //   // this.auth.login();
-
-  //   const payload: LoginRequest = {
-  //     email: formValue.email ?? '',
-  //     password: formValue.password ?? '',
-  //   };
-
-  //   this.api.login(payload).subscribe({
-  //     next: (res) => {
-  //       //  store token using local service
-  //       this.local.set('access_token', res.access_token);
-  //       // console.log('Navigating...');
-  //       this.router.navigate(['/chatbot']);
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     },
-  //   });
-  // }
-
   //Observable → Promise
-  async onSubmit() {
+  public async onSubmit(): Promise<void> {
     this.errorMessage = '';
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -150,9 +114,7 @@ export class Login {
 
       //  navigate
       this.router.navigate(['/chatbot']);
-    } catch (err: any) {
-      console.error(err);
-
+    } catch (err: unknown) {
       this.errorMessage = 'Login failed, please try again later';
     }
   }

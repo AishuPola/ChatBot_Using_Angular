@@ -13,19 +13,23 @@ import { Local } from '../shared/services/local';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Navbar {
-  showAccessDenied = false;
+  public showAccessDenied: boolean = false;
   constructor(
     public router: Router,
     private local: Local,
   ) {}
 
-  isChatPage(): boolean {
+  public isChatPage(): boolean {
     return this.router.url === '/chatbot';
   }
 
-  handleUserManagementClick() {
-    const role = this.local.get('role');
+  public handleUserManagementClick(): void {
+    let role: string | null = this.local.get('role');
 
+    // in case of quotes issue
+    if (typeof role === 'string') {
+      role = role.replace(/"/g, '');
+    }
     if (role === 'admin') {
       this.router.navigate(['/user-management']);
     } else {
@@ -33,7 +37,7 @@ export class Navbar {
     }
   }
 
-  closeAccessDenied() {
+  public closeAccessDenied(): void {
     this.showAccessDenied = false;
     this.router.navigate(['/chatbot']);
   }

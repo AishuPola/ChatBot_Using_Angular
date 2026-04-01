@@ -10,7 +10,6 @@ import { OnInit, ChangeDetectorRef } from '@angular/core';
 import { ListUsersResponse, DeleteUserResponse } from '../shared/models/user.model';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-user-management',
@@ -33,29 +32,28 @@ export class UserManagement implements OnInit {
       }
     });
   }
-  showModal = false;
+  public showModal = false;
 
-  users: User[] = [];
-  showDeleteConfirm: boolean = false;
-  userIdToDelete: string | null = null;
-  deleteErrorMessage: string = '';
-  isDeleting: boolean = false;
-  createErrorMessage: string = '';
-  isCreating: boolean = false;
-  showAccessDenied: boolean = false;
+  public users: User[] = [];
+  public showPassword = false;
+  public showDeleteConfirm: boolean = false;
+  public userIdToDelete: string | null = null;
+  public deleteErrorMessage: string = '';
+  public isDeleting: boolean = false;
+  public createErrorMessage: string = '';
+  public isCreating: boolean = false;
+  public showAccessDenied: boolean = false;
 
-  newUser: CreateUserRequest = {
+  public newUser: CreateUserRequest = {
     username: '',
     email: '',
     password: '',
     role: 'user',
   };
-  // async ngAfterViewInit() {
-  //   console.log('AfterViewInit');
-  //   await this.loadUsers();
-  // }
-  async ngOnInit() {
-    console.log('UserManagement Loaded');
+  public togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+  public async ngOnInit(): Promise<void> {
     const role = this.local.get('role');
     //  If not admin → block access
     if (role !== 'admin') {
@@ -68,125 +66,29 @@ export class UserManagement implements OnInit {
     this.cdr.detectChanges();
   }
 
-  async loadUsers() {
+  public async loadUsers(): Promise<void> {
     try {
       const res: ListUsersResponse = await firstValueFrom(this.api.listUsers());
-
-      console.log('Users API:', res);
 
       this.users = res.users;
     } catch (error) {
       console.error('Failed to load users:', error);
-      // alert('Failed to load users');
     }
   }
 
-  // async loadUsers() {
-  //   try {
-  //     const res: ListUsersResponse = await firstValueFrom(this.api.listUsers());
-  //     console.log('Users API Response:', res);
-
-  //     // Update the array
-  //     this.users = [...res.users]; // Use spread operator to ensure a new reference
-
-  //     // FORCE UI Update
-  //     this.cdr.detectChanges();
-  //   } catch (error) {
-  //     console.error('Failed to load users:', error);
-  //     alert('Failed to load users');
-  //   }
-  // }
-  openModal() {
+  public openModal(): void {
     this.showModal = true;
     this.createErrorMessage = '';
+    this.showPassword = false; // Reset to hidden when modal opens
   }
 
-  closeModal() {
+  public closeModal(): void {
     this.showModal = false;
   }
 
-  // async createUser() {
-  //   try {
-  //     const payload: CreateUserRequest = {
-  //       username: this.newUser.username,
-  //       email: this.newUser.email,
-  //       password: this.newUser.password,
-  //       role: this.newUser.role,
-  //     };
-
-  //     // 🔥 API CALL FIRST
-  //     const res: CreateUserResponse = await firstValueFrom(this.api.createUser(payload));
-
-  //     console.log('Create response:', res);
-
-  //     // ✅ Store role
-  //     this.local.set('role', res.user.role);
-
-  //     // ✅ Close modal
-  //     //this.closeModal();
-
-  //     // ✅ Reset form
-  //     this.newUser = {
-  //       username: '',
-  //       email: '',
-  //       password: '',
-  //       role: 'user',
-  //     };
-
-  //     // 🔥 RELOAD USERS (IMPORTANT)
-  //     await this.loadUsers();
-  //     this.closeModal();
-  //   } catch (error: any) {
-  //     console.error('Create user failed:', error);
-
-  //     // show backend error if exists
-  //     alert(error?.error?.message || 'Failed to create user');
-  //   }
-  // }
-
-  // async createUser() {
-  //   try {
-  //     const payload: CreateUserRequest = {
-  //       username: this.newUser.username,
-  //       email: this.newUser.email,
-  //       password: this.newUser.password,
-  //       role: this.newUser.role,
-  //     };
-
-  //     // ✅ CREATE API
-  //     const res: CreateUserResponse = await firstValueFrom(this.api.createUser(payload));
-
-  //     console.log('Create response:', res);
-
-  //     // ✅ Store role
-  //     this.local.set('role', res.user.role);
-
-  //     // ✅ Reset form
-  //     this.newUser = {
-  //       username: '',
-  //       email: '',
-  //       password: '',
-  //       role: 'user',
-  //     };
-
-  //     // ✅ Close modal
-  //     this.closeModal();
-
-  //     // 🔥 SEPARATE TRY for loadUsers
-  //     try {
-  //       await this.loadUsers();
-  //     } catch (loadError) {
-  //       console.error('Load users failed:', loadError);
-  //     }
-  //   } catch (error: any) {
-  //     console.error('Create user failed:', error);
-  //     alert(error?.error?.message || 'Failed to create user');
-  //   }
-  // }
-
-  async createUser() {
+  public async createUser(): Promise<void> {
     try {
-      this.createErrorMessage = ''; // 🔥 reset
+      this.createErrorMessage = ''; // reset
       this.isCreating = true;
       const userExists = this.users.some(
         (user) => user.username === this.newUser.username || user.email === this.newUser.email,
@@ -203,17 +105,16 @@ export class UserManagement implements OnInit {
         role: this.newUser.role,
       };
 
-      // 1. Call API
+      //  Call API
       const res: CreateUserResponse = await firstValueFrom(this.api.createUser(payload));
-      console.log('Create response:', res);
 
-      // 2. Safety Check: Only store role if res.user exists
+      // Safety Check: Only store role if res.user exists
       if (res?.user) {
         this.local.set('role', res.user.role);
         this.local.set('userId', res.user.id);
       }
 
-      // 3. Reset form
+      //  Reset form
       this.newUser = {
         username: '',
         email: '',
@@ -226,51 +127,38 @@ export class UserManagement implements OnInit {
 
       await this.loadUsers();
       this.cdr.detectChanges();
-
-      //await this.loadUsers(); // Refresh the list
-
-      // Optional: Show success message instead of nothing
-      //console.log('User created and list refreshed');
     } catch (error: any) {
-      console.error('Create user failed:', error);
       // This alert triggers if the API fails OR if your code above crashes
       this.createErrorMessage = error?.error?.message || 'Failed to create user';
     } finally {
       this.isCreating = false;
     }
   }
-  deleteUser(id: string) {
+  public deleteUser(id: string): void {
     this.userIdToDelete = id;
     this.showDeleteConfirm = true;
     this.deleteErrorMessage = '';
   }
-  cancelDelete() {
+  public cancelDelete(): void {
     this.showDeleteConfirm = false;
     this.userIdToDelete = null;
   }
 
-  async confirmDelete() {
+  public async confirmDelete(): Promise<void> {
     if (!this.userIdToDelete) return;
 
     const id = this.userIdToDelete;
     this.deleteErrorMessage = ''; //  clear old error
     this.isDeleting = true;
-    console.log('Deleting user with ID:', id);
-    // const url = `/api/user-management/user/id/${id}`;
 
     try {
       this.showDeleteConfirm = false; // Hide modal during API call
       const res = await firstValueFrom(this.api.deleteUser(id));
-      console.log('User deleted successfully:', res);
 
       await this.loadUsers();
       this.cdr.detectChanges();
-      //  refresh UI
-
-      // await this.loadUsers();
     } catch (err: any) {
-      console.error('Error deleting user:', err);
-      //  SHOW ERROR IN POPUP
+      //  showing error message
       this.deleteErrorMessage = err?.error?.message || 'Failed to delete user';
     } finally {
       this.isDeleting = false;
@@ -278,7 +166,7 @@ export class UserManagement implements OnInit {
     }
   }
 
-  goToChatbot() {
+  public goToChatbot(): void {
     this.showAccessDenied = false;
     this.router.navigate(['/chatbot']);
   }

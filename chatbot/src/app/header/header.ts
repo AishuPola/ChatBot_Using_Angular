@@ -13,7 +13,7 @@ export class Header {
     public auth: Auth,
     private router: Router,
   ) {}
-  logout() {
+  public logout(): void {
     this.auth.logout();
     this.router.navigate(['/']);
   }
