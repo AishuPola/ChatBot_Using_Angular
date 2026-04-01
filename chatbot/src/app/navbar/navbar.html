@@ -15,7 +15,14 @@
     >
       User Management
     </button> -->
-    <button class="nav-btn" (click)="handleUserManagementClick()">User Management</button>
+    <button
+      class="nav-btn"
+      (click)="handleUserManagementClick()"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      User Management
+    </button>
     <button
       class="nav-btn"
       routerLink="/document-management"

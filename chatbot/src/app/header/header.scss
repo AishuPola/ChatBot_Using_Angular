@@ -40,34 +40,6 @@
   align-items: center;
 }
 
-// .logout-btn {
-//   display: flex;
-//   align-items: center;
-//   gap: 8px; // space between icon & text
-
-//   padding: 8px 14px;
-//   border-radius: 6px;
-//   border: 1px solid #1d6fa5;
-//   background: transparent;
-//   color: #1d6fa5;
-//   font-size: 14px;
-//   cursor: pointer;
-//   transition: all 0.2s ease;
-
-//   .logout-icon {
-//     width: 16px; // 🔥 control icon size
-//     height: 16px;
-//     object-fit: contain;
-//   }
-
-//   &:hover {
-//     background: #1d6fa5;
-//     color: white;
-//   }
-
-//   &:active {
-//     transform: scale(0.98);
-//   }
 .logout-btn {
   display: flex;
   align-items: center;
@@ -77,9 +49,8 @@
   border-radius: 6px;
   border: 1px solid #1d6fa5;
 
-  /* 🔥 Changed from transparent to your brand color */
   background: #055386;
-  /* 🔥 Changed from blue to white */
+
   color: white;
 
   font-size: 14px;
@@ -90,12 +61,11 @@
     width: 16px;
     height: 16px;
     object-fit: contain;
-    /* If your icon is an SVG or font, ensure it inherits the white color */
+
     filter: brightness(0) invert(1);
   }
 
   &:hover {
-    /* Optional: Make it slightly darker or lighter on hover so it still feels interactive */
     background: #155a8a;
     border-color: #155a8a;
   }

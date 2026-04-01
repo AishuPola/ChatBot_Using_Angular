@@ -155,7 +155,7 @@ export class Chatbot {
     if (this.isListening) {
       this.stopListening();
     } else {
-      this.userInput = ''; // reset
+      this.userInput = ''; //  for resetting
       this.startListening();
     }
   }
@@ -164,7 +164,7 @@ export class Chatbot {
     if (this.recognition) {
       this.recognition.stop();
     }
-    clearTimeout(this.silenceTimer); // 🔥 important
+    clearTimeout(this.silenceTimer);
     // important
     this.isListening = false;
     this.cdr.detectChanges();
