@@ -42,6 +42,7 @@ export class UserManagement implements OnInit {
   isDeleting: boolean = false;
   createErrorMessage: string = '';
   isCreating: boolean = false;
+  showAccessDenied: boolean = false;
 
   newUser: CreateUserRequest = {
     username: '',
@@ -55,6 +56,14 @@ export class UserManagement implements OnInit {
   // }
   async ngOnInit() {
     console.log('UserManagement Loaded');
+    const role = this.local.get('role');
+    //  If not admin → block access
+    if (role !== 'admin') {
+      this.showAccessDenied = true;
+      this.cdr.detectChanges();
+      return;
+    }
+
     await this.loadUsers();
     this.cdr.detectChanges();
   }
@@ -267,5 +276,10 @@ export class UserManagement implements OnInit {
       this.isDeleting = false;
       this.userIdToDelete = null;
     }
+  }
+
+  goToChatbot() {
+    this.showAccessDenied = false;
+    this.router.navigate(['/chatbot']);
   }
 }

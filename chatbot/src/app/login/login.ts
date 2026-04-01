@@ -134,6 +134,11 @@ export class Login {
     try {
       //  Convert Observable → Promise
       const res = await firstValueFrom(this.api.login(payload));
+      if (res && res.user) {
+        this.local.set('role', res.user.role); // 👈 This MUST happen here
+        this.local.set('userId', res.user.id);
+        this.local.set('token', res.access_token);
+      }
       if (!res?.access_token) {
         this.errorMessage = 'Invalid credentials';
         return;

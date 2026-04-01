@@ -1,21 +1,21 @@
 <div class="nav-container">
-  <!-- 🔙 Back to Chat -->
+  <!--  Back to Chat -->
   <div class="nav-left" [ngClass]="{ 'hide-back': isChatPage() }" routerLink="/chatbot">
     <ion-icon name="arrow-back-outline"></ion-icon>
     <span>Back to Chat</span>
   </div>
 
-  <!-- 🔘 Right Buttons -->
+  <!--  Right Buttons -->
   <div class="nav-actions">
-    <button
+    <!-- <button
       class="nav-btn"
       routerLink="/user-management"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
     >
       User Management
-    </button>
-
+    </button> -->
+    <button (click)="handleUserManagementClick()">User Management</button>
     <button
       class="nav-btn"
       routerLink="/document-management"
@@ -24,5 +24,19 @@
     >
       Document Management
     </button>
+  </div>
+</div>
+<!--  ACCESS DENIED POPUP -->
+<div class="overlay" *ngIf="showAccessDenied"></div>
+
+<div class="modal" *ngIf="showAccessDenied">
+  <div class="modal-content">
+    <h3>Access Denied</h3>
+
+    <p>You are not authorized to view the users list.</p>
+
+    <div class="modal-actions">
+      <button (click)="closeAccessDenied()">OK</button>
+    </div>
   </div>
 </div>

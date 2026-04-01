@@ -1,4 +1,4 @@
-<div class="user-page">
+<div class="user-page" *ngIf="!showAccessDenied">
   <!--  Top Bar -->
   <div class="top-bar">
     <button class="create-btn" (click)="openModal()">Create User</button>
@@ -35,13 +35,12 @@
   </table>
 </div>
 
-<!-- 🔥 OVERLAY -->
+<!--  OVERLAY -->
 <div class="overlay" *ngIf="showModal" (click)="closeModal()"></div>
 
-<!-- 🔥 MODAL -->
+<!--  MODAL -->
 <div class="modal" *ngIf="showModal">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <!-- ❌ Close -->
     <span class="close" (click)="closeModal()">×</span>
 
     <h2>Create User</h2>
@@ -50,8 +49,8 @@
     <input type="email" placeholder="Email" [(ngModel)]="newUser.email" />
     <input type="password" placeholder="Password" [(ngModel)]="newUser.password" />
 
-    <!-- 🔽 Role -->
-    <select [(ngModel)]="newUser.role">
+    <!-- Role -->
+    <select [(ngModel)]="newUser.role" name="role">
       <option value="user">User</option>
       <option value="admin">Admin</option>
     </select>
@@ -67,10 +66,10 @@
     </div>
   </div>
 </div>
-<!-- 🔥 DELETE CONFIRM OVERLAY -->
+<!-- DELETE CONFIRM OVERLAY -->
 <div class="overlay" *ngIf="showDeleteConfirm"></div>
 
-<!-- 🔥 DELETE CONFIRM MODAL -->
+<!--  DELETE CONFIRM MODAL -->
 <div class="modal" *ngIf="showDeleteConfirm">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <!--  Close icon -->
@@ -93,3 +92,17 @@
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="showAccessDenied">
+  <div class="overlay"></div>
+  <div class="modal">
+    <div class="modal-content">
+      <h3>Access Denied</h3>
+      <p>
+        You do not have the required permissions to view the User Management list. Please contact
+        your administrator.
+      </p>
+      <button class="save" (click)="goToChatbot()">Back to Chat</button>
+    </div>
+  </div>
+</ng-container>
