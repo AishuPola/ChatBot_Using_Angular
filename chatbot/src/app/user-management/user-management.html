@@ -1,10 +1,10 @@
 <div class="user-page">
-  <!-- 🔘 Top Bar -->
+  <!--  Top Bar -->
   <div class="top-bar">
-    <button class="create-btn" (click)="openModal()">+ Create User</button>
+    <button class="create-btn" (click)="openModal()">Create User</button>
   </div>
 
-  <!-- 📋 Table -->
+  <!--  Table -->
   <table class="user-table">
     <thead>
       <tr>
@@ -24,7 +24,12 @@
         <td>{{ user.email }}</td>
         <td>{{ user.created_at }}</td>
         <td>{{ user.created_by }}</td>
-        <td><button class="delete-btn">Delete</button></td>
+        <td>
+          <button class="delete-btn" (click)="deleteUser(user.id)">
+            <!-- <ion-icon name="trash-outline"></ion-icon> -->
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -54,6 +59,25 @@
     <div class="modal-actions">
       <button (click)="closeModal()">Cancel</button>
       <button class="save" (click)="createUser()">Create</button>
+    </div>
+  </div>
+</div>
+<!-- 🔥 DELETE CONFIRM OVERLAY -->
+<div class="overlay" *ngIf="showDeleteConfirm"></div>
+
+<!-- 🔥 DELETE CONFIRM MODAL -->
+<div class="modal" *ngIf="showDeleteConfirm">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- ❌ Close icon -->
+    <span class="close" (click)="cancelDelete()">×</span>
+
+    <h3>Confirm Delete</h3>
+
+    <p>Are you sure you want to delete this user?</p>
+
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      <button class="delete-btn" (click)="confirmDelete()">Delete</button>
     </div>
   </div>
 </div>

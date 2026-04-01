@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse } from '../models/login.model';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 
 import {
   CreateUserRequest,
@@ -43,14 +44,8 @@ export class Api {
       }),
     );
   }
-
-  delete<T>(url: string) {
-    return this.http.delete<T>(`${this.baseUrl}${url}`).pipe(
-      catchError((err) => {
-        console.error('DELETE Error:', err);
-        return throwError(() => err);
-      }),
-    );
+  delete<T>(endpoint: string) {
+    return this.http.delete<T>(`${environment.baseUrl}${endpoint}`);
   }
 
   login(data: LoginRequest) {
@@ -64,8 +59,9 @@ export class Api {
     return this.get<ListUsersResponse>('api/list-users');
   }
 
-  //  Delete User API
-  // deleteUser(userId: string) {
-  //   return this.delete<DeleteUserResponse>(`api/user-management/user/id/${userId}`);
-  // }
+  deleteUser(userId: string) {
+    return this.delete<DeleteUserResponse>(
+      `api/user-management/user/id/${userId}`, // ONLY endpoint
+    );
+  }
 }

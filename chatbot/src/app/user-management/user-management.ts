@@ -36,6 +36,8 @@ export class UserManagement implements OnInit {
   showModal = false;
 
   users: User[] = [];
+  showDeleteConfirm: boolean = false;
+  userIdToDelete: string | null = null;
 
   newUser: CreateUserRequest = {
     username: '',
@@ -212,6 +214,39 @@ export class UserManagement implements OnInit {
       console.error('Create user failed:', error);
       // This alert triggers if the API fails OR if your code above crashes
       alert(error?.error?.message || 'Failed to create user');
+    }
+  }
+  deleteUser(id: string) {
+    this.userIdToDelete = id;
+    this.showDeleteConfirm = true;
+  }
+  cancelDelete() {
+    this.showDeleteConfirm = false;
+    this.userIdToDelete = null;
+  }
+
+  async confirmDelete() {
+    if (!this.userIdToDelete) return;
+
+    const id = this.userIdToDelete;
+    console.log('Deleting user with ID:', id);
+    // const url = `/api/user-management/user/id/${id}`;
+
+    try {
+      this.showDeleteConfirm = false; // Hide modal during API call
+      const res = await firstValueFrom(this.api.deleteUser(id));
+      console.log('User deleted successfully:', res);
+
+      await this.loadUsers();
+      this.cdr.detectChanges();
+      //  refresh UI
+
+      // await this.loadUsers();
+    } catch (err: any) {
+      console.error('Error deleting user:', err);
+      alert(err?.error?.message || 'Failed to delete user');
+    } finally {
+      this.userIdToDelete = null;
     }
   }
 }
