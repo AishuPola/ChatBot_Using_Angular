@@ -18,6 +18,7 @@
     <button
       class="nav-btn"
       (click)="handleUserManagementClick()"
+      [ngClass]="{ active: router.url === '/user-management' }"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
     >
