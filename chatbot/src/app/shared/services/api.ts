@@ -50,7 +50,7 @@ export class Api {
 
   login(data: LoginRequest) {
     return this.post<LoginResponse>('login', data);
-  } // after this
+  }
 
   createUser(data: CreateUserRequest) {
     return this.post<CreateUserResponse>('api/user-management/create', data);

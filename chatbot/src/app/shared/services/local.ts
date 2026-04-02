@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class Local {
-  set(key: string, value: any) {
+  public set(key: string, value: any): void {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  get(key: string) {
+  public get(key: string) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   }
@@ -18,6 +18,6 @@ export class Local {
   }
 
   clear() {
-    localStorage.clear(); // ✅ for logout
+    localStorage.clear(); // for logout
   }
 }

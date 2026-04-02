@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   //   return false;
   // }
   // const token = local.get('access_token');
-  // console.log('TOKEN IN GUARD 👉', token);
+
   // if (token) {
   //   return true; //  allow navigation
   // } else {
@@ -26,10 +26,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   // Use the method you already wrote in your Auth service!
   if (auth.isAuthenticated()) {
     return true; //  Token exists, let them pass
-  } 
-  
-  else {
-    console.warn('Access Denied: Redirecting to Login...');
+  } else {
     router.navigate(['/']); //  Redirect to login page
 
     return false; //  Block navigation
