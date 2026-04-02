@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Footer } from '../../../footer/footer';
 import { Header } from '../../../header/header';
 import { Navbar } from '../../../navbar/navbar';
@@ -12,5 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './layout.scss',
 })
 export class Layout {
-  constructor(public auth: Auth) {}
+  constructor(
+    public auth: Auth,
+    public router: Router,
+  ) {}
 }

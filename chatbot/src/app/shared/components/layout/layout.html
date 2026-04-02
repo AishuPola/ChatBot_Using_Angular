@@ -3,7 +3,7 @@
     <app-header></app-header>
   </header>
 
-  <nav class="navbar-container" *ngIf="auth.isAuthenticated$ | async">
+  <nav class="navbar-container" *ngIf="(auth.isAuthenticated$ | async) && router.url !== '/'">
     <app-navbar></app-navbar>
   </nav>
 
