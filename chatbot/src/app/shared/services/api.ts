@@ -14,6 +14,7 @@ import {
   ListUsersResponse,
   DeleteUserResponse,
 } from '../models/user.model';
+import { DocumentItem } from '../models/document.model';
 
 @Injectable({
   providedIn: 'root',
@@ -60,8 +61,16 @@ export class Api {
   }
 
   deleteUser(userId: string) {
-    return this.delete<DeleteUserResponse>(
-      `api/user-management/user/id/${userId}`, // ONLY endpoint
-    );
+    return this.delete<DeleteUserResponse>(`api/user-management/user/id/${userId}`);
+  }
+
+  //  Upload the documents
+  public uploadDocuments(formData: FormData) {
+    return this.post<any>('api/upload-documents', formData);
+  }
+
+  //  List of documents
+  public getDocuments() {
+    return this.get<{ files: DocumentItem[] }>('api/documents');
   }
 }

@@ -4,6 +4,7 @@ import { Login } from './login/login';
 import { Chatbot } from './chatbot/chatbot';
 import { authGuard } from './shared/guards/auth-guard';
 import { UserManagement } from './user-management/user-management';
+import { DocumentManagement } from './document-management/document-management';
 export const routes: Routes = [
   {
     path: '',
@@ -12,7 +13,8 @@ export const routes: Routes = [
       { path: '', component: Login }, // Page 1
       { path: 'chatbot', component: Chatbot, canActivate: [authGuard] }, // Page 2
       { path: 'user-management', component: UserManagement },
-      { path: '', redirectTo: 'user-management', pathMatch: 'full' },
+      { path: 'document-management', component: DocumentManagement },
+      // { path: '', redirectTo: 'user-management', pathMatch: 'full' },
     ],
   },
 ];
