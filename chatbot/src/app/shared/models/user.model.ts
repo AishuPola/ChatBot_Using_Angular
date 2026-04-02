@@ -1,4 +1,4 @@
-// 🔹 Request
+//  Request
 export interface CreateUserRequest {
   username: string;
   email: string;
@@ -6,7 +6,7 @@ export interface CreateUserRequest {
   role: 'user' | 'admin';
 }
 
-// 🔹 Inner User object
+//  Inner User object
 export interface User {
   id: string;
   username: string;
@@ -16,7 +16,7 @@ export interface User {
   created_by: string;
 }
 
-// 🔹 Full API Response
+//  Full API Response
 export interface CreateUserResponse {
   message: string;
   user: User;

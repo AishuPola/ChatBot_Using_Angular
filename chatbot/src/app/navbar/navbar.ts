@@ -39,6 +39,7 @@ export class Navbar {
 
   public closeAccessDenied(): void {
     this.showAccessDenied = false;
-    this.router.navigate(['/chatbot']);
+    // window.history.back();
+    this.router.navigate(['/chatbot'], { replaceUrl: true });
   }
 }

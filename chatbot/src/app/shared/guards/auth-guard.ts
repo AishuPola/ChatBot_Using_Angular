@@ -26,9 +26,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   // Use the method you already wrote in your Auth service!
   if (auth.isAuthenticated()) {
     return true; //  Token exists, let them pass
-  } else {
+  } 
+  
+  else {
     console.warn('Access Denied: Redirecting to Login...');
     router.navigate(['/']); //  Redirect to login page
+
     return false; //  Block navigation
   }
 };

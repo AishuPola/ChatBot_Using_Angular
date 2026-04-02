@@ -65,6 +65,24 @@ export class UserManagement implements OnInit {
     await this.loadUsers();
     this.cdr.detectChanges();
   }
+  // public async ionViewWillEnter(): Promise<void> {
+  //   let role: string | null = this.local.get('role');
+
+  //   //  safety fix (handle quotes issue)
+  //   if (typeof role === 'string') {
+  //     role = role.replace(/"/g, '');
+  //   }
+
+  //   if (role !== 'admin') {
+  //     this.showAccessDenied = true;
+  //     return;
+  //   }
+
+  //   this.showAccessDenied = false;
+
+  //   await this.loadUsers();
+  //   this.cdr.detectChanges();
+  // }
 
   public async loadUsers(): Promise<void> {
     try {
@@ -84,6 +102,15 @@ export class UserManagement implements OnInit {
 
   public closeModal(): void {
     this.showModal = false;
+    //resets the form
+    this.newUser = {
+      username: '',
+      email: '',
+      password: '',
+      role: 'user',
+    };
+    //clear the errors
+    this.createErrorMessage = '';
   }
 
   public async createUser(): Promise<void> {
