@@ -21,14 +21,14 @@ export class DocumentManagement {
     private router: Router,
     private cdr: ChangeDetectorRef,
   ) {}
-  public showModal: boolean = false;
 
+  public showModal: boolean = false;
   public selectedFiles: File[] = [];
   public uploadedFiles: UploadedMedia[] = [];
-
   public documents: any[] = [];
 
-  public selectedType: string = 'pdf';
+  // Set to empty string so the placeholder option shows by default
+  public selectedType: string = '';
 
   public isUploading: boolean = false;
   public uploadError: string = '';
@@ -47,16 +47,30 @@ export class DocumentManagement {
     this.selectedFiles = [];
     this.uploadedFiles = [];
     this.uploadError = '';
-    this.selectedType = 'pdf';
+    this.selectedType = '';
   }
 
   public onFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
 
-    if (!input.files) return;
+    if (!input.files || input.files.length === 0) return;
 
-    this.selectedFiles = Array.from(input.files);
+    const filesArray = Array.from(input.files);
+    this.uploadError = '';
 
+    // Check if the file already exists in the documents list
+    for (let file of filesArray) {
+      const isDuplicate = this.documents.some((doc) => doc.name === file.name);
+      if (isDuplicate) {
+        this.uploadError = `Error: Document "${file.name}" already exists.`;
+        this.selectedFiles = [];
+        this.uploadedFiles = [];
+        input.value = ''; // Reset input
+        return;
+      }
+    }
+
+    this.selectedFiles = filesArray;
     this.uploadedFiles = [];
 
     this.selectedFiles.forEach((file) => {
@@ -71,16 +85,25 @@ export class DocumentManagement {
           fileProgessSize: 0,
           fileProgress: 0,
         });
+        // Force view to update immediately so the file name displays
+        this.cdr.detectChanges();
       };
 
       reader.readAsDataURL(file);
     });
+
+    input.value = ''; // Reset input so the same file can be selected again if removed
   }
 
   public async uploadDocuments(): Promise<void> {
     try {
       this.isUploading = true;
       this.uploadError = '';
+
+      if (!this.selectedType) {
+        this.uploadError = 'Please select a document template type.';
+        return;
+      }
 
       if (!this.selectedFiles.length) {
         this.uploadError = 'Please select a file';
@@ -98,10 +121,7 @@ export class DocumentManagement {
 
       const res = await firstValueFrom(this.api.uploadDocuments(formData));
       console.log('upload response', res);
-      if (!this.selectedFiles.length) {
-        this.uploadError = 'Please select a file';
-        return;
-      }
+
       this.closeModal();
       await this.loadDocuments();
       this.cdr.detectChanges();
@@ -116,11 +136,19 @@ export class DocumentManagement {
     try {
       const res = await firstValueFrom(this.api.getDocuments());
       this.documents = res.documents || [];
-      // this.documents = res.documents;
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Failed to load documents', error);
     }
+  }
+
+  public deleteDocument(docId: string): void {
+    // Optional: Call your delete API here
+    // await firstValueFrom(this.api.deleteDocument(docId));
+
+    // Remove from local array
+    this.documents = this.documents.filter((doc) => doc.id !== docId);
+    this.cdr.detectChanges();
   }
 
   public async ngOnInit(): Promise<void> {

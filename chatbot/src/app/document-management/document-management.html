@@ -1,10 +1,8 @@
 <div class="doc-page">
-  <!-- 🔹 TOP BAR -->
   <div class="top-bar">
     <button class="upload-btn" (click)="openModal()">Upload Document</button>
   </div>
 
-  <!-- 🔹 TABLE -->
   <table class="doc-table">
     <thead>
       <tr>
@@ -31,62 +29,52 @@
         </td>
 
         <td>
-          <button class="view-btn">View</button>
+          <button class="delete-btn">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<!-- 🔥 OVERLAY -->
 <div class="overlay" *ngIf="showModal" (click)="closeModal()"></div>
 
-<!-- 🔥 POPUP -->
 <div class="modal" *ngIf="showModal">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <span class="close" (click)="closeModal()">×</span>
+    <ion-icon name="close-outline" class="close-icon" (click)="closeModal()"></ion-icon>
 
-    <!-- ICON -->
     <div class="upload-icon">
       <ion-icon name="cloud-upload-outline"></ion-icon>
     </div>
 
     <h2>Upload Document</h2>
 
-    <!-- 🔽 TYPE -->
-    <select [(ngModel)]="selectedType" class="dropdown">
-      <option value="pdf">PDF</option>
-      <option value="png">PNG</option>
-    </select>
+    <div class="form-group">
+      <label class="dropdown-label">Select the Type</label>
+      <select [(ngModel)]="selectedType" class="dropdown">
+        <option value="" disabled selected>Select which template is suitable</option>
+        <option value="pdf">PDF</option>
+        <option value="png">PNG</option>
+      </select>
+    </div>
 
-    <!-- 📂 FILE INPUT -->
     <label class="file-upload">
       <input type="file" multiple (change)="onFileSelect($event)" hidden />
       <span>Upload your file</span>
       <ion-icon name="cloud-upload-outline"></ion-icon>
     </label>
 
-    <!-- 📄 FILE NAME -->
-    <!-- <div class="file-list" *ngFor="let file of uploadedFiles">
-      {{ file.fileName }}
-    </div> -->
     <div class="file-preview" *ngIf="uploadedFiles.length > 0">
       <div class="file-item" *ngFor="let file of uploadedFiles">
         <ion-icon name="document-outline"></ion-icon>
 
-        <span class="file-name">
-          <!-- {{ file.fileName }} -->
-          {{ file.fileName }} ({{ file.fileSize }})
-        </span>
+        <span class="file-name"> {{ file.fileName }} ({{ file.fileSize }}) </span>
       </div>
     </div>
 
-    <!-- ERROR -->
     <p class="error-msg" *ngIf="uploadError">
       {{ uploadError }}
     </p>
 
-    <!-- BUTTON -->
     <button class="upload-submit" (click)="uploadDocuments()" [disabled]="isUploading">
       {{ isUploading ? 'Uploading...' : 'Upload' }}
     </button>
