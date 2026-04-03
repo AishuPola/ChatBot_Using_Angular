@@ -119,7 +119,7 @@
 /* ICON */
 .upload-icon ion-icon {
   font-size: 50px;
-  color: #6366f1;
+  color: #1e20a1;
   margin-bottom: 10px;
 }
 
@@ -160,7 +160,7 @@
   margin-top: 15px;
   width: 100%;
   padding: 12px;
-  background: linear-gradient(90deg, #6366f1, #4f46e5);
+  background: linear-gradient(90deg, #1a1b57, #4f46e5);
   color: white;
   border: none;
   border-radius: 25px;
@@ -182,4 +182,44 @@
   font-size: 12px;
   margin-top: 10px;
   color: #64748b;
+}
+
+/* 🔥 FILE PREVIEW CONTAINER */
+.file-preview {
+  margin-top: 10px;
+  text-align: left;
+}
+
+/* 🔥 EACH FILE */
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  background: #eef2ff;
+  border-radius: 6px;
+}
+
+/* 🔥 ICON */
+.file-item ion-icon {
+  color: #6366f1;
+  font-size: 18px;
+}
+
+/* 🔥 FILE NAME (MAIN PART) */
+.file-name {
+  color: #1d4ed8;
+  font-weight: 500;
+  font-size: 13px;
+}
+.error-msg {
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+  text-align: center;
+  border: 1px solid #fca5a5;
 }

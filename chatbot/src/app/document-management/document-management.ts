@@ -26,7 +26,7 @@ export class DocumentManagement {
   public selectedFiles: File[] = [];
   public uploadedFiles: UploadedMedia[] = [];
 
-  public documents: DocumentItem[] = [];
+  public documents: any[] = [];
 
   public selectedType: string = 'pdf';
 
@@ -78,13 +78,14 @@ export class DocumentManagement {
   }
 
   public async uploadDocuments(): Promise<void> {
-    if (!this.selectedFiles.length) {
-      this.uploadError = 'Please select a file';
-      return;
-    }
-
     try {
       this.isUploading = true;
+      this.uploadError = '';
+
+      if (!this.selectedFiles.length) {
+        this.uploadError = 'Please select a file';
+        return;
+      }
 
       const formData = new FormData();
 
@@ -95,8 +96,12 @@ export class DocumentManagement {
       formData.append('category', this.selectedType);
       formData.append('tags', '');
 
-      await firstValueFrom(this.api.uploadDocuments(formData));
-
+      const res = await firstValueFrom(this.api.uploadDocuments(formData));
+      console.log('upload response', res);
+      if (!this.selectedFiles.length) {
+        this.uploadError = 'Please select a file';
+        return;
+      }
       this.closeModal();
       await this.loadDocuments();
       this.cdr.detectChanges();
@@ -110,7 +115,8 @@ export class DocumentManagement {
   public async loadDocuments(): Promise<void> {
     try {
       const res = await firstValueFrom(this.api.getDocuments());
-      this.documents = res.files || [];
+      this.documents = res.documents || [];
+      // this.documents = res.documents;
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Failed to load documents', error);

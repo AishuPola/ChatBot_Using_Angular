@@ -14,7 +14,7 @@ import {
   ListUsersResponse,
   DeleteUserResponse,
 } from '../models/user.model';
-import { DocumentItem } from '../models/document.model';
+import { DocumentItem, GetDocumentsResponse } from '../models/document.model';
 
 @Injectable({
   providedIn: 'root',
@@ -71,6 +71,6 @@ export class Api {
 
   //  List of documents
   public getDocuments() {
-    return this.get<{ files: DocumentItem[] }>('api/documents');
+    return this.get<GetDocumentsResponse>('api/documents');
   }
 }

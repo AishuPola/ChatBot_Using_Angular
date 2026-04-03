@@ -21,3 +21,7 @@ export interface UploadResponse {
   message: string;
   files: any[];
 }
+
+export interface GetDocumentsResponse {
+  documents: DocumentItem[];
+}

@@ -67,8 +67,18 @@
     </label>
 
     <!-- 📄 FILE NAME -->
-    <div class="file-list" *ngFor="let file of uploadedFiles">
+    <!-- <div class="file-list" *ngFor="let file of uploadedFiles">
       {{ file.fileName }}
+    </div> -->
+    <div class="file-preview" *ngIf="uploadedFiles.length > 0">
+      <div class="file-item" *ngFor="let file of uploadedFiles">
+        <ion-icon name="document-outline"></ion-icon>
+
+        <span class="file-name">
+          <!-- {{ file.fileName }} -->
+          {{ file.fileName }} ({{ file.fileSize }})
+        </span>
+      </div>
     </div>
 
     <!-- ERROR -->
