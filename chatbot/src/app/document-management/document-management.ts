@@ -50,22 +50,80 @@ export class DocumentManagement {
     this.selectedType = '';
   }
 
+  // public onFileSelect(event: Event): void {
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (!input.files || input.files.length === 0) return;
+
+  //   const filesArray = Array.from(input.files);
+  //   this.uploadError = '';
+
+  //   // Check if the file already exists in the documents list
+  //   for (let file of filesArray) {
+  //     const isDuplicate = this.documents.some((doc) => doc.name === file.name);
+  //     if (isDuplicate) {
+  //       this.uploadError = `Error: Document "${file.name}" already exists.`;
+  //       this.selectedFiles = [];
+  //       this.uploadedFiles = [];
+  //       input.value = ''; // Reset input
+  //       return;
+  //     }
+  //   }
+
+  //   this.selectedFiles = filesArray;
+  //   this.uploadedFiles = [];
+
+  //   this.selectedFiles.forEach((file) => {
+  //     const reader = new FileReader();
+
+  //     reader.onload = (e) => {
+  //       this.uploadedFiles.push({
+  //         fileName: file.name,
+  //         fileSize: (file.size / 1024).toFixed(2) + ' KB',
+  //         fileType: file.type,
+  //         fileUrl: e.target?.result || null,
+  //         fileProgessSize: 0,
+  //         fileProgress: 0,
+  //       });
+  //       // Force view to update immediately so the file name displays
+  //       this.cdr.detectChanges();
+  //     };
+
+  //     reader.readAsDataURL(file);
+  //   });
+
+  //   input.value = ''; // Reset input so the same file can be selected again if removed
+  // }
+
   public onFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
-
     if (!input.files || input.files.length === 0) return;
 
     const filesArray = Array.from(input.files);
     this.uploadError = '';
 
-    // Check if the file already exists in the documents list
+    const allowedTypes = ['application/pdf', 'image/png'];
+
     for (let file of filesArray) {
+      // ❌ FILE TYPE VALIDATION
+      if (!allowedTypes.includes(file.type)) {
+        this.uploadError = 'Only PDF and PNG files are allowed';
+        this.resetFileInput(input);
+        return;
+      }
+
+      // ❌ TYPE MATCH VALIDATION
+      if (this.selectedType && !file.type.includes(this.selectedType)) {
+        this.uploadError = `You selected ${this.selectedType.toUpperCase()} but uploaded wrong file type`;
+        this.resetFileInput(input);
+        return;
+      }
+
+      // ❌ DUPLICATE CHECK
       const isDuplicate = this.documents.some((doc) => doc.name === file.name);
       if (isDuplicate) {
-        this.uploadError = `Error: Document "${file.name}" already exists.`;
-        this.selectedFiles = [];
-        this.uploadedFiles = [];
-        input.value = ''; // Reset input
+        this.uploadError = `File "${file.name}" already exists`;
+        this.resetFileInput(input);
         return;
       }
     }
@@ -73,26 +131,30 @@ export class DocumentManagement {
     this.selectedFiles = filesArray;
     this.uploadedFiles = [];
 
-    this.selectedFiles.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        this.uploadedFiles.push({
-          fileName: file.name,
-          fileSize: (file.size / 1024).toFixed(2) + ' KB',
-          fileType: file.type,
-          fileUrl: e.target?.result || null,
-          fileProgessSize: 0,
-          fileProgress: 0,
-        });
-        // Force view to update immediately so the file name displays
-        this.cdr.detectChanges();
-      };
-
-      reader.readAsDataURL(file);
+    filesArray.forEach((file) => {
+      this.uploadedFiles.push({
+        fileName: file.name,
+        fileSize: (file.size / 1024).toFixed(2) + ' KB',
+        fileType: file.type,
+        fileUrl: null,
+        fileProgessSize: 0,
+        fileProgress: 0,
+      });
+      this.cdr.detectChanges();
     });
 
-    input.value = ''; // Reset input so the same file can be selected again if removed
+    this.cdr.detectChanges();
+  }
+
+  private resetFileInput(input: HTMLInputElement): void {
+    input.value = '';
+    this.selectedFiles = [];
+    this.uploadedFiles = [];
+  }
+
+  public removeFile(index: number): void {
+    this.selectedFiles.splice(index, 1);
+    this.uploadedFiles.splice(index, 1);
   }
 
   public async uploadDocuments(): Promise<void> {

@@ -29,7 +29,7 @@
         </td>
 
         <td>
-          <button class="delete-btn">Delete</button>
+          <button class="delete-btn" (click)="deleteDocument(doc.id)">Delete</button>
         </td>
       </tr>
     </tbody>
@@ -42,32 +42,38 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <ion-icon name="close-outline" class="close-icon" (click)="closeModal()"></ion-icon>
 
-    <div class="upload-icon">
-      <ion-icon name="cloud-upload-outline"></ion-icon>
-    </div>
-
     <h2>Upload Document</h2>
 
+    <!-- TYPE -->
     <div class="form-group">
       <label class="dropdown-label">Select the Type</label>
       <select [(ngModel)]="selectedType" class="dropdown">
-        <option value="" disabled selected>Select which template is suitable</option>
+        <option value="" disabled>Select which template is suitable</option>
         <option value="pdf">PDF</option>
         <option value="png">PNG</option>
       </select>
     </div>
 
-    <label class="file-upload">
-      <input type="file" multiple (change)="onFileSelect($event)" hidden />
-      <span>Upload your file</span>
-      <ion-icon name="cloud-upload-outline"></ion-icon>
-    </label>
+    <!-- FILE UPLOAD (LIKE DROPDOWN) -->
+    <div class="form-group">
+      <label class="dropdown-label">Upload File</label>
 
+      <label class="file-upload">
+        <input type="file" multiple (change)="onFileSelect($event)" hidden />
+        <span>Select file</span>
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </label>
+    </div>
+
+    <!-- FILE LIST -->
     <div class="file-preview" *ngIf="uploadedFiles.length > 0">
-      <div class="file-item" *ngFor="let file of uploadedFiles">
+      <div class="file-item" *ngFor="let file of uploadedFiles; let i = index">
         <ion-icon name="document-outline"></ion-icon>
 
         <span class="file-name"> {{ file.fileName }} ({{ file.fileSize }}) </span>
+
+        <!-- ❌ REMOVE FILE -->
+        <ion-icon name="close-circle" class="remove-icon" (click)="removeFile(i)"> </ion-icon>
       </div>
     </div>
 
