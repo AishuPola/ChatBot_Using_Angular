@@ -73,4 +73,8 @@ export class Api {
   public getDocuments() {
     return this.get<GetDocumentsResponse>('api/documents');
   }
+  //delete document
+  public deleteDocument(documentId: string) {
+    return this.delete<any>(`api/documents/id/${documentId}`);
+  }
 }

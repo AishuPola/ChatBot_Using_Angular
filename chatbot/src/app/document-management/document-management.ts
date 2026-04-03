@@ -204,13 +204,18 @@ export class DocumentManagement {
     }
   }
 
-  public deleteDocument(docId: string): void {
-    // Optional: Call your delete API here
-    // await firstValueFrom(this.api.deleteDocument(docId));
+  public async deleteDocument(docId: string): Promise<void> {
+    try {
+      await firstValueFrom(this.api.deleteDocument(docId));
 
-    // Remove from local array
-    this.documents = this.documents.filter((doc) => doc.id !== docId);
-    this.cdr.detectChanges();
+      //  Remove from UI instantly
+      this.documents = this.documents.filter((doc) => doc.id !== docId);
+
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Delete failed', error);
+      this.uploadError = 'Failed to delete document';
+    }
   }
 
   public async ngOnInit(): Promise<void> {
