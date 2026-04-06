@@ -39,7 +39,9 @@ export class DocumentManagement {
   public selectedDocId: string = '';
   public isDeleting: boolean = false;
   public deleteErrorMessage: string = '';
-
+  //for previewing file
+  public showPreview: boolean = false;
+  public previewFile: any = null;
   public openModal(): void {
     this.showModal = true;
     this.resetForm();
@@ -109,7 +111,7 @@ export class DocumentManagement {
 
     const filesArray = Array.from(input.files);
 
-    //converts filelist into usable array.
+    //converts filelist(all files) into usable array.
     this.uploadError = '';
 
     const allowedTypes = ['application/pdf', 'image/png'];
@@ -142,11 +144,22 @@ export class DocumentManagement {
     this.uploadedFiles = [];
 
     filesArray.forEach((file) => {
+      //   readAsDataURL(file)
+
+      //  This creates a base64 URL
+
+      //  Problem with base64:
+      // Works inconsistently in new tabs
+      // Large files (PDF) may fail
+      // Browser sometimes blocks rendering
+      // so we use const fileUrl = URL.createObjectURL(file);
+      const fileUrl = URL.createObjectURL(file);
+
       this.uploadedFiles.push({
         fileName: file.name,
         fileSize: (file.size / 1024).toFixed(2) + ' KB',
         fileType: file.type,
-        fileUrl: null,
+        fileUrl: fileUrl, // for preview
         fileProgessSize: 0,
         fileProgress: 0,
       });
@@ -265,5 +278,17 @@ export class DocumentManagement {
     } finally {
       this.isDeleting = false;
     }
+  }
+
+  //open in new tab
+
+  public openInNewTab(file: any): void {
+    if (!file.fileUrl) return;
+    const url =
+      typeof file.fileUrl === 'string'
+        ? file.fileUrl
+        : URL.createObjectURL(new Blob([file.fileUrl]));
+
+    window.open(url, '_blank');
   }
 }

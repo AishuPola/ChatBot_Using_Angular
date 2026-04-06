@@ -14,6 +14,7 @@
         <th>Approved By</th>
         <th>Status</th>
         <th>Action</th>
+        <!-- en.json file  for text translation-->
       </tr>
     </thead>
 
@@ -29,7 +30,7 @@
         <td [ngClass]="doc.status.toLowerCase()">
           {{ doc.status }}
         </td>
-
+        <!-- use flag -->
         <td>
           <button class="delete-btn" (click)="openDeleteConfirm(doc.id)">Delete</button>
         </td>
@@ -50,6 +51,7 @@
     <div class="form-group">
       <label class="dropdown-label">Select the Type</label>
       <select [(ngModel)]="selectedType" class="dropdown">
+        <!-- use reactive form instead of ngmodel -->
         <option value="" disabled>Select which template is suitable</option>
         <option value="pdf">PDF</option>
         <option value="png">PNG</option>
@@ -72,10 +74,17 @@
       <div class="file-item" *ngFor="let file of uploadedFiles; let i = index">
         <ion-icon name="document-outline"></ion-icon>
 
-        <span class="file-name"> {{ file.fileName }} ({{ file.fileSize }}) </span>
+        <span class="file-name clickable" (click)="openInNewTab(file); $event.stopPropagation()">
+          {{ file.fileName }} ({{ file.fileSize }})
+        </span>
 
         <!--  REMOVE FILE -->
-        <ion-icon name="close-circle" class="remove-icon" (click)="removeFile(i)"> </ion-icon>
+        <ion-icon
+          name="close-circle"
+          class="remove-icon"
+          (click)="removeFile(i); $event.stopPropagation()"
+        >
+        </ion-icon>
       </div>
     </div>
 
@@ -85,26 +94,43 @@
 
     <button class="upload-submit" (click)="uploadDocuments()" [disabled]="isUploading">
       {{ isUploading ? 'Uploading...' : 'Upload' }}
+      <!-- use ion icon for loading  -->
     </button>
 
     <p class="supported">Supported Files: PDF, PNG</p>
   </div>
-</div>
-<!-- <app-delete-confirmation
-  [visible]="showDeleteConfirm"
-  [isDeleting]="isDeleting"
-  [errorMessage]="deleteErrorMessage"
-  (confirm)="confirmDelete()"
-  (cancel)="cancelDelete()"
->
-</app-delete-confirmation> -->
 
-<app-delete-confirmation
-  [visible]="showDeleteConfirm"
-  [message]="'Are you sure you want to delete this document?'"
-  [errorMessage]="deleteErrorMessage"
-  [isDeleting]="isDeleting"
-  (confirm)="confirmDelete()"
-  (cancel)="cancelDelete()"
->
-</app-delete-confirmation>
+  <!-- <div class="overlay" *ngIf="showPreview"></div>
+
+  <div class="preview-wrapper" *ngIf="showPreview">
+    <div class="modal-content preview-modal" (click)="$event.stopPropagation()">
+      <ion-icon name="close-outline" class="close-icon"> </ion-icon> -->
+
+  <!-- IMAGE -->
+  <!-- <img
+        *ngIf="previewFile?.fileType.includes('image')"
+        [src]="previewFile?.fileUrl"
+        class="preview-image"
+      /> -->
+
+  <!-- PDF -->
+  <!-- <iframe
+        *ngIf="previewFile?.fileType.includes('pdf')"
+        [src]="previewFile?.fileUrl"
+        class="preview-pdf"
+      >
+      </iframe>
+    </div>
+  </div>
+</div> -->
+
+  <app-delete-confirmation
+    [visible]="showDeleteConfirm"
+    [message]="'Are you sure you want to delete this document?'"
+    [errorMessage]="deleteErrorMessage"
+    [isDeleting]="isDeleting"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  >
+  </app-delete-confirmation>
+</div>

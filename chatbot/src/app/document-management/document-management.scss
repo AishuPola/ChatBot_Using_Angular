@@ -237,13 +237,13 @@
   border-radius: 6px;
 }
 
-/* 🔥 ICON */
+/*  ICON */
 .file-item ion-icon {
   color: #6366f1;
   font-size: 18px;
 }
 
-/* 🔥 FILE NAME (MAIN PART) */
+/*  FILE NAME (MAIN PART) */
 .file-name {
   color: #1d4ed8;
   font-weight: 500;
@@ -292,4 +292,54 @@
   color: #b91c1c;
   background: #fee2e2;
   border: 1px solid #f87171;
+}
+/* FULL SCREEN CLEAN VIEW */
+.preview-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* IMAGE */
+.preview-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* PDF */
+.preview-pdf {
+  width: 90%;
+  height: 90%;
+  border: none;
+  background: white;
+}
+
+/* CLOSE BUTTON ONLY */
+.preview-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+.clickable {
+  cursor: pointer;
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.clickable:hover {
+  color: #0f172a;
 }
