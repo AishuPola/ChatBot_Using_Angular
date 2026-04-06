@@ -1,0 +1,17 @@
+{
+  "DOCUMENT": {
+    "TITLE": "Upload Document",
+    "NAME": "Document Name",
+    "CATEGORY": "Category",
+    "TYPE": "Type",
+    "DATE": "Date",
+    "APPROVED_BY": "Approved By",
+    "STATUS": "Status",
+    "ACTION": "Action",
+    "UPLOAD_BUTTON": "Upload Document",
+    "SELECT_TYPE": "Select the Type",
+    "UPLOAD_FILE": "Upload File",
+    "SUPPORTED": "Supported Files: PDF, PNG",
+    "DELETE_CONFIRM": "Are you sure you want to delete this document?"
+  }
+}

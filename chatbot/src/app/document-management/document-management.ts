@@ -9,9 +9,18 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { DeleteConfirmation } from '../shared/components/delete-confirmation/delete-confirmation';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-document-management',
-  imports: [FormsModule, IonicModule, DeleteConfirmation, CommonModule, ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    IonicModule,
+    DeleteConfirmation,
+    CommonModule,
+    ReactiveFormsModule,
+
+    TranslateModule,
+  ],
   templateUrl: './document-management.html',
   styleUrl: './document-management.scss',
 })
@@ -21,7 +30,10 @@ export class DocumentManagement {
     private local: Local,
     private router: Router,
     private cdr: ChangeDetectorRef,
-  ) {}
+    private translate: TranslateService,
+  ) {
+    this.translate.use('en');
+  }
 
   public showModal: boolean = false;
   public selectedFiles: File[] = [];
@@ -296,23 +308,27 @@ export class DocumentManagement {
   public cancelDelete(): void {
     this.showDeleteConfirm = false;
     this.deleteErrorMessage = '';
+    this.cdr.detectChanges();
   }
 
   public async confirmDelete(): Promise<void> {
     try {
       this.isDeleting = true;
+      this.deleteErrorMessage = '';
+      this.cdr.detectChanges(); // Force UI to show "Deleting..."
 
       await firstValueFrom(this.api.deleteDocument(this.selectedDocId));
 
       this.documents = this.documents.filter((doc) => doc.id !== this.selectedDocId);
       this.cancelDelete();
       await this.loadDocuments();
-      this.cdr.detectChanges();
+      // this.cdr.detectChanges();
       // this.cancelDelete();
     } catch (error) {
       this.deleteErrorMessage = 'Failed to delete document';
     } finally {
       this.isDeleting = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -337,3 +353,6 @@ export class DocumentManagement {
     return new Date(+year, +month - 1, +day);
   }
 }
+// export function HttpLoaderFactory(http: HttpClient) {
+//   return new TranslateHttpLoader();
+// }
