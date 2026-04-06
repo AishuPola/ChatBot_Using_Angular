@@ -28,3 +28,27 @@ export interface UploadResponse {
 export interface GetDocumentsResponse {
   documents: DocumentItem[];
 }
+
+export interface AccessControlInfo {
+  access_type: string;
+  documents_searched: string[];
+  user_role: string;
+  note: string;
+}
+
+export interface SearchStats {
+  documents_searched: number;
+  chunks_found: number;
+  store_type: string;
+}
+
+export interface DocumentQueryResponse {
+  answer: string;
+  success: boolean;
+  has_answer: boolean;
+  scope: string;
+  access_control_info: AccessControlInfo;
+  search_stats: SearchStats;
+  similarity_info: string;
+  user: string;
+}

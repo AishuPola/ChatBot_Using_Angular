@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 
 import { LoginRequest, LoginResponse } from '../models/login.model';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 
 import {
@@ -14,7 +14,11 @@ import {
   ListUsersResponse,
   DeleteUserResponse,
 } from '../models/user.model';
-import { DocumentItem, GetDocumentsResponse } from '../models/document.model';
+import {
+  DocumentItem,
+  DocumentQueryResponse,
+  GetDocumentsResponse,
+} from '../models/document.model';
 
 @Injectable({
   providedIn: 'root',
@@ -76,5 +80,21 @@ export class Api {
   //delete document
   public deleteDocument(documentId: string) {
     return this.delete<any>(`api/documents/id/${documentId}`);
+  }
+
+  // API for Shared Documents
+  public querySharedDocuments(question: string): Observable<DocumentQueryResponse> {
+    const params = new HttpParams().set('question', question);
+    return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/shared-documents`, {
+      params,
+    });
+  }
+
+  // API for My Documents (Assuming the endpoint follows the same pattern)
+  public queryMyDocuments(question: string): Observable<DocumentQueryResponse> {
+    const params = new HttpParams().set('question', question);
+    return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/my-documents`, {
+      params,
+    });
   }
 }
