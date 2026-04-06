@@ -6,6 +6,7 @@
   <table class="doc-table">
     <thead>
       <tr>
+        <!-- <th>Document ID</th> -->
         <th>Document Name</th>
         <th>Category</th>
         <th>Type</th>
@@ -18,6 +19,7 @@
 
     <tbody>
       <tr *ngFor="let doc of documents">
+        <!-- <td>{{ doc.id }}</td> -->
         <td>{{ doc.name }}</td>
         <td>{{ doc.category }}</td>
         <td>{{ doc.type }}</td>
@@ -29,7 +31,7 @@
         </td>
 
         <td>
-          <button class="delete-btn" (click)="deleteDocument(doc.id)">Delete</button>
+          <button class="delete-btn" (click)="openDeleteConfirm(doc.id)">Delete</button>
         </td>
       </tr>
     </tbody>
@@ -72,7 +74,7 @@
 
         <span class="file-name"> {{ file.fileName }} ({{ file.fileSize }}) </span>
 
-        <!-- ❌ REMOVE FILE -->
+        <!--  REMOVE FILE -->
         <ion-icon name="close-circle" class="remove-icon" (click)="removeFile(i)"> </ion-icon>
       </div>
     </div>
@@ -88,3 +90,21 @@
     <p class="supported">Supported Files: PDF, PNG</p>
   </div>
 </div>
+<!-- <app-delete-confirmation
+  [visible]="showDeleteConfirm"
+  [isDeleting]="isDeleting"
+  [errorMessage]="deleteErrorMessage"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+>
+</app-delete-confirmation> -->
+
+<app-delete-confirmation
+  [visible]="showDeleteConfirm"
+  [message]="'Are you sure you want to delete this document?'"
+  [errorMessage]="deleteErrorMessage"
+  [isDeleting]="isDeleting"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+>
+</app-delete-confirmation>

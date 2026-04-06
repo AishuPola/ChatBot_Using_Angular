@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { DeleteConfirmation } from '../shared/components/delete-confirmation/delete-confirmation';
 
 @Component({
   selector: 'app-document-management',
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [CommonModule, FormsModule, IonicModule, DeleteConfirmation],
   templateUrl: './document-management.html',
   styleUrl: './document-management.scss',
 })
@@ -32,6 +33,12 @@ export class DocumentManagement {
 
   public isUploading: boolean = false;
   public uploadError: string = '';
+
+  //for delete confirmation:
+  public showDeleteConfirm: boolean = false;
+  public selectedDocId: string = '';
+  public isDeleting: boolean = false;
+  public deleteErrorMessage: string = '';
 
   public openModal(): void {
     this.showModal = true;
@@ -96,30 +103,33 @@ export class DocumentManagement {
   // }
 
   public onFileSelect(event: Event): void {
+    //User selects file → event triggers
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
     const filesArray = Array.from(input.files);
+
+    //converts filelist into usable array.
     this.uploadError = '';
 
     const allowedTypes = ['application/pdf', 'image/png'];
 
     for (let file of filesArray) {
-      // ❌ FILE TYPE VALIDATION
+      //  FILE TYPE VALIDATION
       if (!allowedTypes.includes(file.type)) {
         this.uploadError = 'Only PDF and PNG files are allowed';
         this.resetFileInput(input);
         return;
       }
 
-      // ❌ TYPE MATCH VALIDATION
+      //  TYPE MATCH VALIDATION
       if (this.selectedType && !file.type.includes(this.selectedType)) {
         this.uploadError = `You selected ${this.selectedType.toUpperCase()} but uploaded wrong file type`;
         this.resetFileInput(input);
         return;
       }
 
-      // ❌ DUPLICATE CHECK
+      // DUPLICATE CHECK
       const isDuplicate = this.documents.some((doc) => doc.name === file.name);
       if (isDuplicate) {
         this.uploadError = `File "${file.name}" already exists`;
@@ -148,13 +158,16 @@ export class DocumentManagement {
 
   private resetFileInput(input: HTMLInputElement): void {
     input.value = '';
-    this.selectedFiles = [];
-    this.uploadedFiles = [];
+    this.selectedFiles = []; //nothing shown
+    this.uploadedFiles = []; //preview disappers
   }
 
   public removeFile(index: number): void {
     this.selectedFiles.splice(index, 1);
     this.uploadedFiles.splice(index, 1);
+    //remove items from both arrays.
+    //The splice() method of Array instances changes the contents of an array by
+    // removing or replacing existing elements and/or adding new elements in place
   }
 
   public async uploadDocuments(): Promise<void> {
@@ -172,10 +185,13 @@ export class DocumentManagement {
         return;
       }
 
+      //FormData is a special JavaScript object
+      // used to send data to backend in multipart format.
       const formData = new FormData();
 
       this.selectedFiles.forEach((file) => {
         formData.append('files', file);
+        // internally it becomes Content-Type: multipart/form-data
       });
 
       formData.append('category', this.selectedType);
@@ -213,7 +229,7 @@ export class DocumentManagement {
 
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Delete failed', error);
+      //console.error('Delete failed', error);
       this.uploadError = 'Failed to delete document';
     }
   }
@@ -221,5 +237,33 @@ export class DocumentManagement {
   public async ngOnInit(): Promise<void> {
     await this.loadDocuments();
     this.cdr.detectChanges();
+  }
+
+  public openDeleteConfirm(id: string): void {
+    this.selectedDocId = id;
+    this.showDeleteConfirm = true;
+  }
+
+  public cancelDelete(): void {
+    this.showDeleteConfirm = false;
+    this.deleteErrorMessage = '';
+  }
+
+  public async confirmDelete(): Promise<void> {
+    try {
+      this.isDeleting = true;
+
+      await firstValueFrom(this.api.deleteDocument(this.selectedDocId));
+
+      this.documents = this.documents.filter((doc) => doc.id !== this.selectedDocId);
+      this.cancelDelete();
+      await this.loadDocuments();
+      this.cdr.detectChanges();
+      // this.cancelDelete();
+    } catch (error) {
+      this.deleteErrorMessage = 'Failed to delete document';
+    } finally {
+      this.isDeleting = false;
+    }
   }
 }

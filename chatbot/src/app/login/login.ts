@@ -115,7 +115,7 @@ export class Login {
       //  navigate
       this.router.navigate(['/chatbot']);
     } catch (err: unknown) {
-      this.errorMessage = 'Login failed, please try again later';
+      this.errorMessage = 'Login failed, please enter correct credentials.';
     }
   }
 }

@@ -1,0 +1,25 @@
+<div class="overlay" *ngIf="visible" (click)="cancel.emit()"></div>
+
+<div class="modal" *ngIf="visible">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- CLOSE -->
+    <span class="close" (click)="cancel.emit()">×</span>
+
+    <h3>Confirm Delete</h3>
+
+    <p>{{ message }}</p>
+
+    <!-- ERROR -->
+    <p class="error-msg" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="cancel.emit()">Cancel</button>
+
+      <button class="delete-btn" (click)="confirm.emit()" [disabled]="isDeleting">
+        {{ isDeleting ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>
