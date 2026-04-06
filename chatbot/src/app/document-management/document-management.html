@@ -24,13 +24,20 @@
         <td>{{ doc.name }}</td>
         <td>{{ doc.category }}</td>
         <td>{{ doc.type }}</td>
-        <td>{{ doc.created_at }}</td>
+        <!-- <td>{{ doc.upload_date }}</td> -->
+
+        <td>
+          {{ doc.upload_date ? (formatDate(doc.upload_date) | date: 'dd MMM yyyy') : '-' }}
+        </td>
         <td>{{ doc.approved_by }}</td>
 
-        <td [ngClass]="doc.status.toLowerCase()">
+        <!-- <td [ngClass]="doc.status.toLowerCase()">
+          {{ doc.status }}
+        </td> -->
+        <!-- use flag -->
+        <td [ngClass]="doc.statusClass">
           {{ doc.status }}
         </td>
-        <!-- use flag -->
         <td>
           <button class="delete-btn" (click)="openDeleteConfirm(doc.id)">Delete</button>
         </td>
@@ -48,15 +55,18 @@
     <h2>Upload Document</h2>
 
     <!-- TYPE -->
-    <div class="form-group">
-      <label class="dropdown-label">Select the Type</label>
-      <select [(ngModel)]="selectedType" class="dropdown">
-        <!-- use reactive form instead of ngmodel -->
-        <option value="" disabled>Select which template is suitable</option>
-        <option value="pdf">PDF</option>
-        <option value="png">PNG</option>
-      </select>
-    </div>
+    <form [formGroup]="uploadForm">
+      <div class="form-group">
+        <label class="dropdown-label">Select the Type</label>
+        <!-- <select [(ngModel)]="selectedType" class="dropdown"> -->
+
+        <select formControlName="type" class="dropdown">
+          <option value="" disabled>Select which template is suitable</option>
+          <option value="pdf">PDF</option>
+          <option value="png">PNG</option>
+        </select>
+      </div>
+    </form>
 
     <!-- FILE UPLOAD (LIKE DROPDOWN) -->
     <div class="form-group">

@@ -15,6 +15,9 @@ export interface DocumentItem {
   created_at: string;
   approved_by: string;
   status: string;
+  upload_date: string;
+
+  approved_date: string | null;
 }
 
 export interface UploadResponse {

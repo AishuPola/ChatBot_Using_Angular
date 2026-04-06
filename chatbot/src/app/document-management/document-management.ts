@@ -8,10 +8,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { DeleteConfirmation } from '../shared/components/delete-confirmation/delete-confirmation';
-
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-document-management',
-  imports: [CommonModule, FormsModule, IonicModule, DeleteConfirmation],
+  imports: [FormsModule, IonicModule, DeleteConfirmation, CommonModule, ReactiveFormsModule],
   templateUrl: './document-management.html',
   styleUrl: './document-management.scss',
 })
@@ -29,7 +29,7 @@ export class DocumentManagement {
   public documents: any[] = [];
 
   // Set to empty string so the placeholder option shows by default
-  public selectedType: string = '';
+  //public selectedType: string = '';
 
   public isUploading: boolean = false;
   public uploadError: string = '';
@@ -42,6 +42,10 @@ export class DocumentManagement {
   //for previewing file
   public showPreview: boolean = false;
   public previewFile: any = null;
+
+  public uploadForm: FormGroup = new FormGroup({
+    type: new FormControl('', Validators.required),
+  });
   public openModal(): void {
     this.showModal = true;
     this.resetForm();
@@ -56,7 +60,8 @@ export class DocumentManagement {
     this.selectedFiles = [];
     this.uploadedFiles = [];
     this.uploadError = '';
-    this.selectedType = '';
+    //this.selectedType = '';
+    this.uploadForm.reset();
   }
 
   // public onFileSelect(event: Event): void {
@@ -125,12 +130,19 @@ export class DocumentManagement {
       }
 
       //  TYPE MATCH VALIDATION
-      if (this.selectedType && !file.type.includes(this.selectedType)) {
-        this.uploadError = `You selected ${this.selectedType.toUpperCase()} but uploaded wrong file type`;
+      // if (this.selectedType && !file.type.includes(this.selectedType)) {
+      //   this.uploadError = `You selected ${this.selectedType.toUpperCase()} but uploaded wrong file type`;
+      //   this.resetFileInput(input);
+      //   return;
+      // }// using ngmodel
+
+      const selectedType = this.uploadForm.get('type')?.value;
+
+      if (selectedType && !file.type.includes(selectedType)) {
+        this.uploadError = `You selected ${selectedType.toUpperCase()} but uploaded wrong file type`;
         this.resetFileInput(input);
         return;
       }
-
       // DUPLICATE CHECK
       const isDuplicate = this.documents.some((doc) => doc.name === file.name);
       if (isDuplicate) {
@@ -188,7 +200,14 @@ export class DocumentManagement {
       this.isUploading = true;
       this.uploadError = '';
 
-      if (!this.selectedType) {
+      // if (!this.selectedType) {
+      //   this.uploadError = 'Please select a document template type.';
+      //   return;
+      // }// via using ngmodel
+
+      const selectedType = this.uploadForm.get('type')?.value;
+
+      if (!selectedType) {
         this.uploadError = 'Please select a document template type.';
         return;
       }
@@ -207,7 +226,9 @@ export class DocumentManagement {
         // internally it becomes Content-Type: multipart/form-data
       });
 
-      formData.append('category', this.selectedType);
+      // formData.append('category', this.selectedType);// via ngmodel.
+
+      formData.append('category', selectedType);
       formData.append('tags', '');
 
       const res = await firstValueFrom(this.api.uploadDocuments(formData));
@@ -226,7 +247,22 @@ export class DocumentManagement {
   public async loadDocuments(): Promise<void> {
     try {
       const res = await firstValueFrom(this.api.getDocuments());
-      this.documents = res.documents || [];
+      this.documents = (res.documents || []).map((doc: any) => {
+        const status = doc.status?.toLowerCase();
+        return {
+          ...doc,
+
+          // FLAG (no logic in HTML anymore)
+          statusClass:
+            status === 'approved'
+              ? 'approved'
+              : status?.includes('process')
+                ? 'processing'
+                : status === 'rejected'
+                  ? 'rejected'
+                  : '',
+        };
+      });
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Failed to load documents', error);
@@ -290,5 +326,14 @@ export class DocumentManagement {
         : URL.createObjectURL(new Blob([file.fileUrl]));
 
     window.open(url, '_blank');
+  }
+
+  // for showing data from get documents api.
+
+  public formatDate(dateStr: string | null): Date | null {
+    if (!dateStr) return null;
+
+    const [day, month, year] = dateStr.split('-');
+    return new Date(+year, +month - 1, +day);
   }
 }
