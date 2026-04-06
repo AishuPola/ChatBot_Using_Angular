@@ -34,7 +34,7 @@ export class Login {
   ) {}
 
   public showPassword = false;
-  public showConfirmPassword = false;
+  //public showConfirmPassword = false;
   public errorMessage: string | null = null;
 
   public loginForm: FormGroup = new FormGroup(
@@ -55,15 +55,15 @@ export class Login {
           Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).+$/),
         ],
       }),
-      confirmPassword: new FormControl('', [Validators.required]),
+      // confirmPassword: new FormControl('', [Validators.required]),
     },
-    {
-      //This is the base class for FormControl, FormGroup, and FormArray.
-      // By typing the parameter as AbstractControl,you can access the entire group.
+    // {
+    //   //This is the base class for FormControl, FormGroup, and FormArray.
+    //   // By typing the parameter as AbstractControl,you can access the entire group.
 
-      //The Group Level: Because you need to compare two different fields, this validator is attached to the FormGroup, not the individual confirmPassword field.
-      validators: passwordMatchValidator,
-    },
+    //   //The Group Level: Because you need to compare two different fields, this validator is attached to the FormGroup, not the individual confirmPassword field.
+    //   validators: passwordMatchValidator,
+    // },
   );
 
   public togglePassword(): void {
