@@ -4,7 +4,6 @@
 
   .sidebar {
     width: 260px;
-
     background: #0f172a;
     color: white;
     display: flex;
@@ -39,7 +38,6 @@
 
       ion-icon {
         font-size: 18px;
-
         color: #cbd5f5;
       }
     }
@@ -104,13 +102,12 @@
       }
     }
   }
+
   .chat-area {
     width: 90%;
-
     background: linear-gradient(135deg, #e6f2fa, #f8fbff);
     display: flex;
     flex-direction: column;
-
     position: relative;
 
     .messages {
@@ -128,7 +125,6 @@
       justify-content: center;
       align-items: center;
       gap: 20px;
-
       padding-bottom: 230px;
 
       h2 {
@@ -137,14 +133,54 @@
       }
     }
 
+    /* ADDED: Base styling for document toggles */
+    .doc-toggles {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      z-index: 10;
+
+      .toggle-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid #cbd5f5;
+        background: white;
+        color: #334155;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        ion-icon {
+          font-size: 18px;
+        }
+
+        &:hover {
+          background: #f1f5f9;
+        }
+
+        &.active {
+          background: #1e293b;
+          color: white;
+          border-color: #1e293b;
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+
     .input-box {
-      height: 20%;
+      height: 14%;
       display: flex;
 
       .input-wrapper {
         display: flex;
         align-items: center;
-
         width: 50%;
         background: #1e293b;
         border-radius: 25px;
@@ -199,10 +235,26 @@
         width: 100%;
 
         .input-wrapper {
-          height: 40%;
+          height: 50px;
           width: 50%;
           margin: auto;
         }
+      }
+
+      /* ADDED: Position toggles down below the input box when centered */
+      .doc-toggles {
+        // position: absolute;
+        // top: calc(33% + 60px);
+        // width: 100%;
+
+        position: absolute;
+        top: calc(33% + 65px); /* Pushes it completely below the 50px input */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%; /* Matches the width of the input-wrapper */
+        display: flex;
+        justify-content: flex-start; /* Aligns buttons to the left/start */
+        gap: 5px;
       }
     }
 
@@ -216,7 +268,20 @@
 
       .input-wrapper {
         width: 50%;
-        height: 90%;
+        height: 98%;
+      }
+
+      /* ADDED: Adds space to sit perfectly above the input box in chat view */
+      .doc-toggles {
+        // width: 100%;
+        // margin-bottom: 15px;
+        // flex-shrink: 0;
+
+        width: 50%; /* Matches the width of your .input-wrapper */
+        margin: 0 auto 5px auto; /* Centers the container above the input */
+        display: flex;
+        justify-content: flex-start; /* Pushes the buttons to the left edge */
+        flex-shrink: 0;
       }
     }
   }
@@ -230,10 +295,6 @@
     .message-content {
       display: flex;
       flex-direction: column;
-      // position: relative;
-      // display: inline-block; // bubble wraps content
-      // padding: 18px 10px 10px 10px; // top space for icons
-      // border-radius: 10px;
     }
 
     .actions {
@@ -259,7 +320,6 @@
   .user {
     background: #09246d;
     color: #ffffff;
-
     align-self: flex-end;
   }
 
@@ -268,9 +328,11 @@
     color: #1e293b;
     align-self: flex-start;
     border: 1px solid #e2e8f0;
+    line-height: 1.5; /* Added for better readability of longer texts */
   }
 }
 
+/* Mic animation code remains exactly the same... */
 .mic-btn {
   position: relative;
   overflow: visible;
@@ -333,5 +395,25 @@
   100% {
     transform: translate(-50%, -50%) scale(2.5);
     opacity: 0;
+  }
+}
+
+.custom-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: #ffffff;
+  border-right-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

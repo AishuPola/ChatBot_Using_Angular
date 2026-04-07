@@ -85,16 +85,38 @@
               <ion-icon [name]="msg.copied ? 'checkmark-outline' : 'copy-outline'"></ion-icon>
             </button>
           </div>
-          <span>{{ msg.text }}</span>
+          <span [innerHTML]="formatBotResponse(msg.text)"></span>
         </div>
       </div>
+    </div>
+
+    <div class="doc-toggles">
+      <button
+        class="toggle-btn"
+        [class.active]="searchScope === 'my-docs'"
+        [disabled]="isLoading"
+        (click)="toggleScope('my-docs')"
+      >
+        <ion-icon name="document-text-outline"></ion-icon>
+        My Documents
+      </button>
+
+      <button
+        class="toggle-btn"
+        [class.active]="searchScope === 'shared-docs'"
+        [disabled]="isLoading"
+        (click)="toggleScope('shared-docs')"
+      >
+        <ion-icon name="people-outline"></ion-icon>
+        Shared Documents
+      </button>
     </div>
 
     <!-- INPUT BOX (ALWAYS OUTSIDE messages) -->
     <div class="input-box">
       <div class="input-wrapper">
         <!--  Upload -->
-        <button type="button" class="icon-btn" (click)="fileInput.click()">
+        <button type="button" class="icon-btn" (click)="fileInput.click()" [disabled]="isLoading">
           <ion-icon name="cloud-upload-outline"></ion-icon>
         </button>
 
@@ -105,6 +127,8 @@
           class="giving-input"
           [(ngModel)]="userInput"
           [placeholder]="isListening ? 'Listening...' : 'Ask anything..'"
+          [disabled]="isLoading"
+          (keydown.enter)="handleGlobalEnter($event)"
         />
 
         <!--  Mic -->
@@ -113,13 +137,16 @@
           class="icon-btn mic-btn"
           [class.listening]="isListening"
           (click)="toggleMic()"
+          [disabled]="isLoading"
         >
           <ion-icon name="mic-outline"></ion-icon>
         </button>
 
         <!-- Send -->
-        <button type="button" class="send" (click)="sendMessage()">
-          <ion-icon name="enter-outline"></ion-icon>
+        <button type="button" class="send" (click)="sendMessage()" [disabled]="isLoading">
+          <div class="custom-spinner" *ngIf="isLoading"></div>
+
+          <ion-icon *ngIf="!isLoading" name="enter-outline"></ion-icon>
         </button>
       </div>
     </div>

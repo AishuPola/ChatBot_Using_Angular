@@ -83,18 +83,38 @@ export class Api {
   }
 
   // API for Shared Documents
+  // public querySharedDocuments(question: string): Observable<DocumentQueryResponse> {
+  //   const params = new HttpParams().set('question', question);
+  //   return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/shared-documents`, {
+  //     params,
+  //   });
+  // }
+
+  // // API for My Documents (Assuming the endpoint follows the same pattern)
+  // public queryMyDocuments(question: string): Observable<DocumentQueryResponse> {
+  //   const params = new HttpParams().set('question', question);
+  //   return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/my-documents`, {
+  //     params,
+  //   });
+  // }
+
+  // UPDATED: Appended path safely and handles parameters via HttpParams
   public querySharedDocuments(question: string): Observable<DocumentQueryResponse> {
     const params = new HttpParams().set('question', question);
-    return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/shared-documents`, {
-      params,
-    });
+    const url = this.baseUrl.endsWith('/')
+      ? `${this.baseUrl}api/query/shared-documents`
+      : `${this.baseUrl}/api/query/shared-documents`;
+
+    return this.http.get<DocumentQueryResponse>(url, { params });
   }
 
-  // API for My Documents (Assuming the endpoint follows the same pattern)
+  // UPDATED: Appended path safely and handles parameters via HttpParams
   public queryMyDocuments(question: string): Observable<DocumentQueryResponse> {
     const params = new HttpParams().set('question', question);
-    return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/my-documents`, {
-      params,
-    });
+    const url = this.baseUrl.endsWith('/')
+      ? `${this.baseUrl}api/query/my-documents`
+      : `${this.baseUrl}/api/query/my-documents`;
+
+    return this.http.get<DocumentQueryResponse>(url, { params });
   }
 }
