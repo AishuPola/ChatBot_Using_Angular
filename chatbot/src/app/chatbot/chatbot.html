@@ -78,9 +78,21 @@
           <div class="actions" *ngIf="msg.type === 'bot'">
             <!--  BOT ACTIONS -->
             <!-- SpeechSynthesis browser api for converting text into audio -->
-            <button type="button" class="action-icon" (click)="speak(msg.text)" title="Speak">
+            <!-- <button type="button" class="action-icon" (click)="speak(msg.text)" title="Speak">
               <ion-icon name="volume-high-outline"></ion-icon>
+            </button> -->
+            <!-- added stop for audio. -->
+            <button
+              type="button"
+              class="action-icon"
+              (click)="speak(msg)"
+              [title]="msg.playing ? 'Stop' : 'Speak'"
+            >
+              <ion-icon
+                [name]="msg.playing ? 'pause-circle-outline' : 'volume-high-outline'"
+              ></ion-icon>
             </button>
+
             <button type="button" class="action-icon" (click)="copyText(msg)" title="Copy">
               <ion-icon [name]="msg.copied ? 'checkmark-outline' : 'copy-outline'"></ion-icon>
             </button>
