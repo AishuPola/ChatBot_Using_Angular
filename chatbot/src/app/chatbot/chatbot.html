@@ -114,6 +114,13 @@
     </div>
 
     <div class="doc-toggles">
+      <!-- TOOLTIP -->
+      <div class="tooltip-wrapper" *ngIf="searchScope === 'none' && showCenter">
+        <div class="tooltip-box">
+          <!-- <ion-icon name="hand-left-outline"></ion-icon> -->
+          Please select a document type to start chatting👆
+        </div>
+      </div>
       <button
         class="toggle-btn"
         [class.active]="searchScope === 'my-docs'"
@@ -139,18 +146,24 @@
     <div class="input-box">
       <div class="input-wrapper">
         <!--  Upload -->
-        <button type="button" class="icon-btn" (click)="fileInput.click()" [disabled]="isLoading">
+        <!-- <button type="button" class="icon-btn" (click)="fileInput.click()" [disabled]="isLoading">
           <ion-icon name="cloud-upload-outline"></ion-icon>
         </button>
 
-        <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
+        <input type="file" #fileInput (change)="onFileSelected($event)" hidden /> -->
 
-        <!-- ⌨️ Input -->
+        <!-- ⌨ Input -->
         <input
           class="giving-input"
           [(ngModel)]="userInput"
-          [placeholder]="isListening ? 'Listening...' : 'Ask anything..'"
-          [disabled]="isLoading"
+          [placeholder]="
+            searchScope === 'none'
+              ? 'Select document type first...'
+              : isListening
+                ? 'Listening...'
+                : 'Ask anything..'
+          "
+          [disabled]="isLoading || searchScope === 'none'"
           (keydown.enter)="handleGlobalEnter($event)"
         />
 
@@ -166,7 +179,12 @@
         </button>
 
         <!-- Send -->
-        <button type="button" class="send" (click)="sendMessage()" [disabled]="isLoading">
+        <button
+          type="button"
+          class="send"
+          (click)="sendMessage()"
+          [disabled]="isLoading || searchScope === 'none'"
+        >
           <div class="custom-spinner" *ngIf="isLoading"></div>
 
           <ion-icon *ngIf="!isLoading" name="enter-outline"></ion-icon>

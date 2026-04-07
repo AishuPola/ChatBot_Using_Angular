@@ -67,12 +67,16 @@ export class Chatbot {
     }, 0);
 
     // 1. Standard Chat Logic
+    // if (this.searchScope === 'none') {
+    //   this.messages.push({
+    //     text: 'Hey! 😊 What can I help you with today?',
+    //     type: 'bot',
+    //   });
+    //   setTimeout(() => this.scrollToBottom(), 0);
+    //   return;
+    // }
+
     if (this.searchScope === 'none') {
-      this.messages.push({
-        text: 'Hey! 😊 What can I help you with today?',
-        type: 'bot',
-      });
-      setTimeout(() => this.scrollToBottom(), 0);
       return;
     }
     // ADDED THIS: Force the backend API to strictly reply in English
