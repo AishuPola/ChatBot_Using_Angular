@@ -52,3 +52,8 @@ export interface DocumentQueryResponse {
   similarity_info: string;
   user: string;
 }
+
+export interface DocumentPreviewResponse {
+  content_type: string;
+  content: string;
+}

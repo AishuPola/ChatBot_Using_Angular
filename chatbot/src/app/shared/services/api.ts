@@ -16,6 +16,7 @@ import {
 } from '../models/user.model';
 import {
   DocumentItem,
+  DocumentPreviewResponse,
   DocumentQueryResponse,
   GetDocumentsResponse,
 } from '../models/document.model';
@@ -82,22 +83,6 @@ export class Api {
     return this.delete<any>(`api/documents/id/${documentId}`);
   }
 
-  // API for Shared Documents
-  // public querySharedDocuments(question: string): Observable<DocumentQueryResponse> {
-  //   const params = new HttpParams().set('question', question);
-  //   return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/shared-documents`, {
-  //     params,
-  //   });
-  // }
-
-  // // API for My Documents (Assuming the endpoint follows the same pattern)
-  // public queryMyDocuments(question: string): Observable<DocumentQueryResponse> {
-  //   const params = new HttpParams().set('question', question);
-  //   return this.http.get<DocumentQueryResponse>(`${this.baseUrl}/api/query/my-documents`, {
-  //     params,
-  //   });
-  // }
-
   // UPDATED: Appended path safely and handles parameters via HttpParams
   public querySharedDocuments(question: string): Observable<DocumentQueryResponse> {
     const params = new HttpParams().set('question', question);
@@ -116,5 +101,17 @@ export class Api {
       : `${this.baseUrl}/api/query/my-documents`;
 
     return this.http.get<DocumentQueryResponse>(url, { params });
+  }
+
+  // API for Document Preview
+  public previewDocument(documentId: string): Observable<DocumentPreviewResponse> {
+    const params = new HttpParams().set('preview_type', 'text').set('max_chars', '10000000');
+
+    // Using the admin endpoint from your Swagger screenshot
+    const url = this.baseUrl.endsWith('/')
+      ? `${this.baseUrl}api/admin/preview/document/${documentId}`
+      : `${this.baseUrl}/api/admin/preview/document/${documentId}`;
+
+    return this.http.get<DocumentPreviewResponse>(url, { params });
   }
 }

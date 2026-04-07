@@ -18,10 +18,11 @@
         <!-- en.json file  for text translation-->
         <th>{{ 'DOCUMENT.NAME' | translate }}</th>
         <th>{{ 'DOCUMENT.CATEGORY' | translate }}</th>
-        <th>{{ 'DOCUMENT.TYPE' | translate }}</th>
+        <!-- <th>{{ 'DOCUMENT.TYPE' | translate }}</th> -->
         <th>{{ 'DOCUMENT.DATE' | translate }}</th>
         <th>{{ 'DOCUMENT.APPROVED_BY' | translate }}</th>
         <th>{{ 'DOCUMENT.STATUS' | translate }}</th>
+        <th>Preview</th>
         <th>{{ 'DOCUMENT.ACTION' | translate }}</th>
       </tr>
     </thead>
@@ -31,7 +32,7 @@
         <!-- <td>{{ doc.id }}</td> -->
         <td>{{ doc.name }}</td>
         <td>{{ doc.category }}</td>
-        <td>{{ doc.type }}</td>
+        <!-- <td>{{ doc.type }}</td> -->
         <!-- <td>{{ doc.upload_date }}</td> -->
 
         <td>
@@ -45,6 +46,13 @@
         <!-- use flag -->
         <td [ngClass]="doc.statusClass">
           {{ doc.status }}
+        </td>
+        <td>
+          <ion-icon
+            name="eye-outline"
+            class="preview-eye-icon"
+            (click)="openPreview(doc)"
+          ></ion-icon>
         </td>
         <td>
           <button class="delete-btn" (click)="openDeleteConfirm(doc.id)">Delete</button>
@@ -128,3 +136,15 @@
   (cancel)="cancelDelete()"
 >
 </app-delete-confirmation>
+
+<div class="preview-wrapper" *ngIf="isPreviewModalOpen">
+  <ion-icon name="close-outline" class="preview-close" (click)="closePreview()"></ion-icon>
+
+  <iframe
+    *ngIf="currentPreviewType === 'pdf'"
+    [src]="currentPreviewUrl"
+    class="preview-pdf"
+  ></iframe>
+
+  <img *ngIf="currentPreviewType === 'image'" [src]="currentPreviewUrl" class="preview-image" />
+</div>

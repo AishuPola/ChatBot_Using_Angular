@@ -10,6 +10,7 @@ import { IonicModule } from '@ionic/angular';
 import { DeleteConfirmation } from '../shared/components/delete-confirmation/delete-confirmation';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-document-management',
   imports: [
@@ -31,6 +32,7 @@ export class DocumentManagement {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private translate: TranslateService,
+    private sanitizer: DomSanitizer,
   ) {
     this.translate.use('en');
   }
@@ -54,6 +56,11 @@ export class DocumentManagement {
   //for previewing file
   public showPreview: boolean = false;
   public previewFile: any = null;
+
+  // --- ADDED: Variables for Preview Modal ---
+  public isPreviewModalOpen: boolean = false;
+  public currentPreviewUrl: SafeResourceUrl | null = null;
+  public currentPreviewType: string = '';
 
   public uploadForm: FormGroup = new FormGroup({
     type: new FormControl('', Validators.required),
@@ -352,7 +359,46 @@ export class DocumentManagement {
     const [day, month, year] = dateStr.split('-');
     return new Date(+year, +month - 1, +day);
   }
+
+  // --- UPDATED: Async function to call API and load base64 data ---
+  public async openPreview(doc: any): Promise<void> {
+    if (!doc.id) {
+      this.uploadError = 'Cannot preview: Document ID is missing.';
+      setTimeout(() => (this.uploadError = ''), 3000);
+      return;
+    }
+
+    try {
+      // 1. Fetch the preview data from the backend
+      const res = await firstValueFrom(this.api.previewDocument(doc.id));
+
+      if (res && res.content) {
+        // 2. Determine if it is an image or PDF/Text based on content_type
+        if (res.content_type === 'image' || res.content.startsWith('data:image')) {
+          this.currentPreviewType = 'image';
+        } else {
+          this.currentPreviewType = 'pdf'; // Will use the iframe for PDFs/Text
+        }
+
+        // 3. The API returns a Data URI (e.g., data:image/png;base64,...).
+        // Angular requires us to explicitly mark this base64 string as safe to display.
+        this.currentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.content);
+
+        // 4. Open the modal
+        this.isPreviewModalOpen = true;
+      } else {
+        this.uploadError = 'Preview content is empty.';
+        setTimeout(() => (this.uploadError = ''), 3000);
+      }
+    } catch (error) {
+      console.error('Failed to load document preview:', error);
+      this.uploadError = 'Error loading document preview.';
+      setTimeout(() => (this.uploadError = ''), 3000);
+    }
+  }
+
+  public closePreview(): void {
+    this.isPreviewModalOpen = false;
+    this.currentPreviewUrl = null;
+  }
 }
-// export function HttpLoaderFactory(http: HttpClient) {
-//   return new TranslateHttpLoader();
-// }
