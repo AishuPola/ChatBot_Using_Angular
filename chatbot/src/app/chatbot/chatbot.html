@@ -69,7 +69,10 @@
     <div class="center-screen" *ngIf="showCenter">
       <h2>Hey, How can I help you today?</h2>
     </div>
-
+    <div class="greeting-note" *ngIf="showGreetingNote">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      I am your AI assistant, you can ask any questions where I can help you.
+    </div>
     <!-- MESSAGES -->
 
     <div class="messages" *ngIf="!showCenter" #chatContainer>

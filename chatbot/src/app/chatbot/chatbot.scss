@@ -133,6 +133,32 @@
       }
     }
 
+    .greeting-note {
+      position: absolute;
+
+      top: calc(39% - 37px);
+      /* 🔥 KEY: sits between heading & input */
+      left: 50%;
+      transform: translateX(-50%);
+
+      background: rgba(30, 41, 59, 0.08);
+      color: #334155;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      z-index: 5; /* above background, below tooltip */
+    }
+
+    .greeting-note ion-icon {
+      font-size: 16px;
+      color: #3b82f6;
+    }
+
     // .scope-tooltip {
     //   position: absolute;
     //   top: calc(33% + 95px);
@@ -329,7 +355,7 @@
     &.before-chat {
       .input-box {
         position: absolute;
-        top: 33%;
+        top: 37%;
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
@@ -348,7 +374,7 @@
         // width: 100%;
 
         position: absolute;
-        top: calc(33% + 65px); /* Pushes it completely below the 50px input */
+        top: calc(37% + 65px); /* Pushes it completely below the 50px input */
         left: 50%;
         transform: translateX(-50%);
         width: 50%; /* Matches the width of the input-wrapper */

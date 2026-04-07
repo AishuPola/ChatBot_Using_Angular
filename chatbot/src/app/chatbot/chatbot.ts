@@ -6,7 +6,7 @@ import { HostListener } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Api } from '../shared/services/api';
 import { ChangeDetectorRef } from '@angular/core';
-
+import { NgZone } from '@angular/core';
 @Component({
   selector: 'app-chatbot',
   imports: [CommonModule, FormsModule],
@@ -21,6 +21,7 @@ export class Chatbot {
   public recognition: any;
   public silenceTimer: any;
   public finalTranscript = '';
+  public showGreetingNote: boolean = false;
 
   searchScope: 'none' | 'my-docs' | 'shared-docs' = 'none';
   public isLoading: boolean = false;
@@ -36,8 +37,58 @@ export class Chatbot {
   constructor(
     private cdr: ChangeDetectorRef,
     private api: Api,
+    private zone: NgZone,
   ) {}
+  // ngOnInit() {
+  //   // this.showGreetingNote = true;
 
+  //   const alreadyShown = sessionStorage.getItem('noteShown');
+
+  //   if (!alreadyShown) {
+  //     this.showGreetingNote = true;
+  //     sessionStorage.setItem('noteShown', 'true');
+
+  //     setTimeout(() => {
+  //       this.showGreetingNote = false;
+
+  //       this.cdr.detectChanges();
+  //     }, 9000);
+  //   } else {
+  //     // 4. Ensure it stays off if they already saw it
+  //     this.showGreetingNote = false;
+  //   }
+  // }
+
+  ngOnInit() {
+    // 1. Check if the user has already seen the note this session
+    const hasSeenNote = sessionStorage.getItem('hasSeenGreetingNote');
+
+    // Print the result to your F12 Console so you can see it!
+    console.log('Checking Memory: hasSeenGreetingNote = ', hasSeenNote);
+
+    // 2. If they HAVEN'T seen it
+    if (!hasSeenNote) {
+      console.log("Note hasn't been seen yet! Preparing to show it...");
+
+      // Slight 500ms delay to let the UI draw first
+      setTimeout(() => {
+        this.showGreetingNote = true;
+        sessionStorage.setItem('hasSeenGreetingNote', 'true');
+        this.cdr.detectChanges();
+        console.log('Note is now visible on screen!');
+
+        // 3. Hide the note after 10 seconds
+        setTimeout(() => {
+          this.showGreetingNote = false;
+          this.cdr.detectChanges();
+          console.log('10 seconds passed. Note is now hidden.');
+        }, 10000);
+      }, 500);
+    } else {
+      // 4. If they HAVE seen it
+      console.log('The browser remembers you already saw the note! Skipping.');
+    }
+  }
   @ViewChild('chatContainer') chatContainer!: ElementRef;
 
   public scrollToBottom() {
@@ -49,8 +100,11 @@ export class Chatbot {
   public toggleScope(scope: 'my-docs' | 'shared-docs') {
     if (this.searchScope === scope) {
       this.searchScope = 'none';
+      this.userInput = '';
     } else {
       this.searchScope = scope;
+      // also clear when switching
+      this.userInput = '';
     }
   }
 
