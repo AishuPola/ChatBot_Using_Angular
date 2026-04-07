@@ -82,11 +82,22 @@
               <ion-icon name="volume-high-outline"></ion-icon>
             </button> -->
             <!-- added stop for audio. -->
-            <button
+            <!-- <button
               type="button"
               class="action-icon"
               (click)="speak(msg)"
               [title]="msg.playing ? 'Stop' : 'Speak'"
+            >
+              <ion-icon
+                [name]="msg.playing ? 'pause-circle-outline' : 'volume-high-outline'"
+              ></ion-icon>
+            </button> -->
+            <!-- for pausing -->
+            <button
+              type="button"
+              class="action-icon"
+              (click)="speak(msg)"
+              [title]="msg.playing ? 'Pause' : 'Play'"
             >
               <ion-icon
                 [name]="msg.playing ? 'pause-circle-outline' : 'volume-high-outline'"

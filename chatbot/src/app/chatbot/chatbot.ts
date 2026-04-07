@@ -25,7 +25,13 @@ export class Chatbot {
   searchScope: 'none' | 'my-docs' | 'shared-docs' = 'none';
   public isLoading: boolean = false;
 
-  messages: { text: string; type: 'user' | 'bot'; copied?: boolean; playing?: boolean }[] = [];
+  messages: {
+    text: string;
+    type: 'user' | 'bot';
+    copied?: boolean;
+    playing?: boolean;
+    paused?: boolean;
+  }[] = [];
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -141,41 +147,96 @@ export class Chatbot {
   //   window.speechSynthesis.speak(speech);
   // }
 
+  // for stopping the audio
+  // speak(msg: any) {
+  //   // 1. If this specific message is already playing, STOP it.
+  //   if (msg.playing) {
+  //     window.speechSynthesis.cancel();
+  //     msg.playing = false;
+  //     return; // Exit the function so it doesn't start playing again
+  //   }
+
+  //   // 2. Stop any OTHER audio that might be currently playing
+  //   window.speechSynthesis.cancel();
+
+  //   // 3. Reset the 'playing' status for all messages in the chat
+  //   this.messages.forEach((m) => (m.playing = false));
+
+  //   // 4. Set THIS message to playing
+  //   msg.playing = true;
+
+  //   // 5. Create and configure the speech
+  //   const speech = new SpeechSynthesisUtterance(msg.text);
+  //   speech.lang = 'en-US';
+  //   speech.rate = 1;
+
+  //   // 6. When the audio naturally finishes, reset the icon
+  //   speech.onend = () => {
+  //     msg.playing = false;
+  //     this.cdr.detectChanges(); // Update the UI
+  //   };
+
+  //   // 7. If the audio fails/errors out, reset the icon safely
+  //   speech.onerror = () => {
+  //     msg.playing = false;
+  //     this.cdr.detectChanges(); // Update the UI
+  //   };
+
+  //   // 8. Start speaking
+  //   window.speechSynthesis.speak(speech);
+  // }
+
   speak(msg: any) {
-    // 1. If this specific message is already playing, STOP it.
+    // 1. If this exact message is currently playing, PAUSE it.
     if (msg.playing) {
-      window.speechSynthesis.cancel();
+      window.speechSynthesis.pause();
       msg.playing = false;
-      return; // Exit the function so it doesn't start playing again
+      msg.paused = true; // Mark it as paused
+      this.cdr.detectChanges();
+      return;
     }
 
-    // 2. Stop any OTHER audio that might be currently playing
+    // 2. If this exact message is currently paused, RESUME it.
+    if (msg.paused) {
+      window.speechSynthesis.resume();
+      msg.paused = false;
+      msg.playing = true; // Mark it as playing again
+      this.cdr.detectChanges();
+      return;
+    }
+
+    // 3. If it's a completely new message: Stop anything else playing
     window.speechSynthesis.cancel();
 
-    // 3. Reset the 'playing' status for all messages in the chat
-    this.messages.forEach((m) => (m.playing = false));
+    // 4. Reset states for all messages in the chat
+    this.messages.forEach((m) => {
+      m.playing = false;
+      m.paused = false;
+    });
 
-    // 4. Set THIS message to playing
+    // 5. Start fresh with THIS message
     msg.playing = true;
+    msg.paused = false;
 
-    // 5. Create and configure the speech
     const speech = new SpeechSynthesisUtterance(msg.text);
     speech.lang = 'en-US';
     speech.rate = 1;
 
-    // 6. When the audio naturally finishes, reset the icon
+    // 6. Reset icons automatically when finished
     speech.onend = () => {
       msg.playing = false;
-      this.cdr.detectChanges(); // Update the UI
+      msg.paused = false;
+      this.cdr.detectChanges();
     };
 
-    // 7. If the audio fails/errors out, reset the icon safely
+    // 7. Reset icons if an error occurs
     speech.onerror = () => {
       msg.playing = false;
-      this.cdr.detectChanges(); // Update the UI
+      msg.paused = false;
+      this.cdr.detectChanges();
     };
 
-    // 8. Start speaking
+    // 8. Trigger the speech
     window.speechSynthesis.speak(speech);
   }
   copyText(msg: any) {
