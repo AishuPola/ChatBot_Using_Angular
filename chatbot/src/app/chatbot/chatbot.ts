@@ -25,6 +25,8 @@ export class Chatbot {
 
   searchScope: 'none' | 'my-docs' | 'shared-docs' = 'none';
   public isLoading: boolean = false;
+  public showTooltip: boolean = false;
+  private tooltipTimeout: any;
 
   messages: {
     text: string;
@@ -39,37 +41,13 @@ export class Chatbot {
     private api: Api,
     private zone: NgZone,
   ) {}
-  // ngOnInit() {
-  //   // this.showGreetingNote = true;
-
-  //   const alreadyShown = sessionStorage.getItem('noteShown');
-
-  //   if (!alreadyShown) {
-  //     this.showGreetingNote = true;
-  //     sessionStorage.setItem('noteShown', 'true');
-
-  //     setTimeout(() => {
-  //       this.showGreetingNote = false;
-
-  //       this.cdr.detectChanges();
-  //     }, 9000);
-  //   } else {
-  //     // 4. Ensure it stays off if they already saw it
-  //     this.showGreetingNote = false;
-  //   }
-  // }
 
   ngOnInit() {
     // 1. Check if the user has already seen the note this session
     const hasSeenNote = sessionStorage.getItem('hasSeenGreetingNote');
 
-    // Print the result to your F12 Console so you can see it!
-    console.log('Checking Memory: hasSeenGreetingNote = ', hasSeenNote);
-
     // 2. If they HAVEN'T seen it
     if (!hasSeenNote) {
-      console.log("Note hasn't been seen yet! Preparing to show it...");
-
       // Slight 500ms delay to let the UI draw first
       setTimeout(() => {
         this.showGreetingNote = true;
@@ -83,10 +61,10 @@ export class Chatbot {
         }, 10000);
       }, 500);
     } else {
-      // 4. If they HAVE seen it
       console.log('The browser remembers you already saw the note! Skipping.');
     }
   }
+
   @ViewChild('chatContainer') chatContainer!: ElementRef;
 
   public scrollToBottom() {
@@ -95,7 +73,30 @@ export class Chatbot {
     element.scrollTop = element.scrollHeight;
   }
 
+  //tooltip for selecting the doc type, before giving the ui.
+  public triggerTooltip() {
+    if (this.searchScope === 'none') {
+      this.showTooltip = true;
+      this.cdr.detectChanges();
+
+      // Auto-hide the tooltip after 3 seconds
+      // clearTimeout(this.tooltipTimeout);
+      // this.tooltipTimeout = setTimeout(() => {
+      //   this.showTooltip = false;
+      //   this.cdr.detectChanges();
+      // }, 3000);
+    }
+  }
+
+  // --- ADD THIS NEW FUNCTION ---
+  public hideTooltip() {
+    this.showTooltip = false;
+    this.cdr.detectChanges();
+  }
+
   public toggleScope(scope: 'my-docs' | 'shared-docs') {
+    // Hide the tooltip immediately if scope is selected
+    this.showTooltip = false;
     if (this.searchScope === scope) {
       this.searchScope = 'none';
       this.userInput = '';

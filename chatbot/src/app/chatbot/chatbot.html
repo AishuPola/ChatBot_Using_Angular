@@ -87,11 +87,12 @@
         </div>
       </div>
     </div>
+    <!-- *ngIf="searchScope === 'none' && showCenter" -->
 
     <div class="doc-toggles">
       <div
         class="tooltip-wrapper"
-        *ngIf="searchScope === 'none' && showCenter"
+        *ngIf="showTooltip && searchScope === 'none'"
         [ngClass]="showGreetingNote ? 'tooltip-bottom' : 'tooltip-top'"
       >
         <div class="tooltip-box">Please select a document type to start chatting!</div>
@@ -119,7 +120,12 @@
     </div>
 
     <div class="input-box">
-      <div class="input-wrapper">
+      <div
+        class="input-wrapper"
+        (click)="triggerTooltip()"
+        (mouseenter)="triggerTooltip()"
+        (mouseleave)="hideTooltip()"
+      >
         <input
           class="giving-input"
           [(ngModel)]="userInput"
@@ -139,7 +145,7 @@
           class="icon-btn mic-btn"
           [class.listening]="isListening"
           (click)="toggleMic()"
-          [disabled]="isLoading"
+          [disabled]="isLoading || searchScope === 'none'"
         >
           <ion-icon name="mic-outline"></ion-icon>
         </button>
