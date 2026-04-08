@@ -281,16 +281,20 @@ export class Chatbot {
 
     // 6. Reset icons automatically when finished
     speech.onend = () => {
-      msg.playing = false;
-      msg.paused = false;
-      this.cdr.detectChanges();
+      this.zone.run(() => {
+        msg.playing = false;
+        msg.paused = false;
+        this.cdr.detectChanges();
+      });
     };
 
     // 7. Reset icons if an error occurs
     speech.onerror = () => {
-      msg.playing = false;
-      msg.paused = false;
-      this.cdr.detectChanges();
+      this.zone.run(() => {
+        msg.playing = false;
+        msg.paused = false;
+        this.cdr.detectChanges();
+      });
     };
 
     // 8. Trigger the speech
@@ -323,42 +327,48 @@ export class Chatbot {
     this.cdr.detectChanges();
 
     this.recognition.onresult = (event: any) => {
-      let finalText = '';
-      let interimText = '';
-      let hasSpeech = false;
+      this.zone.run(() => {
+        let finalText = '';
+        let interimText = '';
+        let hasSpeech = false;
 
-      for (let i = 0; i < event.results.length; i++) {
-        const text = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalText += text + ' ';
-          hasSpeech = true;
-        } else {
-          interimText += text;
-          if (text.trim().length > 2) {
+        for (let i = 0; i < event.results.length; i++) {
+          const text = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalText += text + ' ';
             hasSpeech = true;
+          } else {
+            interimText += text;
+            if (text.trim().length > 2) {
+              hasSpeech = true;
+            }
           }
         }
-      }
 
-      this.userInput = finalText + interimText;
-      this.cdr.detectChanges();
+        this.userInput = finalText + interimText;
+        this.cdr.detectChanges();
 
-      if (hasSpeech) {
-        clearTimeout(this.silenceTimer);
-        this.silenceTimer = setTimeout(() => {
-          this.stopListening();
-        }, 3000);
-      }
+        if (hasSpeech) {
+          clearTimeout(this.silenceTimer);
+          this.silenceTimer = setTimeout(() => {
+            this.stopListening();
+          }, 3000);
+        }
+      });
     };
 
     this.recognition.onend = () => {
-      this.isListening = false;
-      this.cdr.detectChanges();
+      this.zone.run(() => {
+        this.isListening = false;
+        this.cdr.detectChanges();
+      });
     };
 
     this.recognition.onerror = () => {
-      this.isListening = false;
-      this.cdr.detectChanges();
+      this.zone.run(() => {
+        this.isListening = false;
+        this.cdr.detectChanges();
+      });
     };
 
     this.recognition.start();
