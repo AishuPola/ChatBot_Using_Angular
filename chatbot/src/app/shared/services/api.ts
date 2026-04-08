@@ -104,14 +104,26 @@ export class Api {
   }
 
   // API for Document Preview
-  public previewDocument(documentId: string): Observable<DocumentPreviewResponse> {
-    const params = new HttpParams().set('preview_type', 'text').set('max_chars', '10000000');
+  // public previewDocument(documentId: string): Observable<DocumentPreviewResponse> {
+  //   const params = new HttpParams().set('preview_type', 'text').set('max_chars', '10000000');
 
-    // Using the admin endpoint from your Swagger screenshot
+  //   // Using the admin endpoint from your Swagger screenshot
+  //   const url = this.baseUrl.endsWith('/')
+  //     ? `${this.baseUrl}api/admin/preview/document/${documentId}`
+  //     : `${this.baseUrl}/api/admin/preview/document/${documentId}`;
+
+  //   return this.http.get<DocumentPreviewResponse>(url, { params });
+  // }
+
+  public previewDocument(documentId: string): Observable<Blob> {
+    // 'raw' tells the server to send the actual file (image or PDF)
+    const params = new HttpParams().set('preview_type', 'raw');
+
     const url = this.baseUrl.endsWith('/')
       ? `${this.baseUrl}api/admin/preview/document/${documentId}`
       : `${this.baseUrl}/api/admin/preview/document/${documentId}`;
 
-    return this.http.get<DocumentPreviewResponse>(url, { params });
+    //  responseType: 'blob' tells Angular not to crash when it receives the file!
+    return this.http.get(url, { params, responseType: 'blob' });
   }
 }

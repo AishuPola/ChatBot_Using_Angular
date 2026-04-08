@@ -361,44 +361,115 @@ export class DocumentManagement {
   }
 
   // --- UPDATED: Async function to call API and load base64 data ---
+  // public async openPreview(doc: any): Promise<void> {
+  //   if (!doc.id) {
+  //     this.uploadError = 'Cannot preview: Document ID is missing.';
+  //     setTimeout(() => (this.uploadError = ''), 3000);
+  //     return;
+  //   }
+
+  //   try {
+  //     // 1. Fetch the preview data from the backend
+  //     const res = await firstValueFrom(this.api.previewDocument(doc.id));
+
+  //     if (res && res.content) {
+  //       // 2. Determine if it is an image or PDF/Text based on content_type
+  //       if (res.content_type === 'image' || res.content.startsWith('data:image')) {
+  //         this.currentPreviewType = 'image';
+  //       } else {
+  //         this.currentPreviewType = 'pdf'; // Will use the iframe for PDFs/Text
+  //       }
+
+  //       // 3. The API returns a Data URI (e.g., data:image/png;base64,...).
+  //       // Angular requires us to explicitly mark this base64 string as safe to display.
+  //       this.currentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.content);
+
+  //       // 4. Open the modal
+  //       this.isPreviewModalOpen = true;
+  //     } else {
+  //       this.uploadError = 'Preview content is empty.';
+  //       setTimeout(() => (this.uploadError = ''), 3000);
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to load document preview:', error);
+  //     this.uploadError = 'Error loading document preview.';
+  //     setTimeout(() => (this.uploadError = ''), 3000);
+  //   }
+  // }
+
   public async openPreview(doc: any): Promise<void> {
     if (!doc.id) {
       this.uploadError = 'Cannot preview: Document ID is missing.';
-      setTimeout(() => (this.uploadError = ''), 3000);
+      this.cdr.detectChanges();
+      setTimeout(() => {
+        this.uploadError = '';
+        this.cdr.detectChanges();
+      }, 3000);
       return;
     }
 
     try {
-      // 1. Fetch the preview data from the backend
-      const res = await firstValueFrom(this.api.previewDocument(doc.id));
+      // Fetch the actual physical file (Blob) from the server
+      const blob: Blob = await firstValueFrom(this.api.previewDocument(doc.id));
 
-      if (res && res.content) {
-        // 2. Determine if it is an image or PDF/Text based on content_type
-        if (res.content_type === 'image' || res.content.startsWith('data:image')) {
+      if (blob && blob.size > 0) {
+        let finalBlob = blob; // We create a variable to hold the final, correctly labeled Blob
+        // The Blob tells us what kind of file it is!
+
+        const fileName = (doc.name || '').toLowerCase();
+
+        // if (blob.type.includes('image')) {
+        //   this.currentPreviewType = 'image';
+        // }
+        // 1. Check if it's an image based on the file extension OR the blob type
+        if (
+          fileName.endsWith('.png') ||
+          fileName.endsWith('.jpg') ||
+          fileName.endsWith('.jpeg') ||
+          blob.type.includes('image')
+        ) {
           this.currentPreviewType = 'image';
+
+          // Force the correct image label so the browser knows how to draw it
+          const mimeType = fileName.endsWith('.png') ? 'image/png' : 'image/jpeg';
+          finalBlob = new Blob([blob], { type: mimeType });
         } else {
-          this.currentPreviewType = 'pdf'; // Will use the iframe for PDFs/Text
+          this.currentPreviewType = 'pdf';
+          // CRITICAL FIX: The backend is sending 'application/octet-stream' (which forces a download).
+          // We wrap the raw data in a new Blob and explicitly label it 'application/pdf'.
+          finalBlob = new Blob([blob], { type: 'application/pdf' });
         }
 
-        // 3. The API returns a Data URI (e.g., data:image/png;base64,...).
-        // Angular requires us to explicitly mark this base64 string as safe to display.
-        this.currentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.content);
+        // Create a safe URL that the browser can use for the <img> or <iframe>
+        const blobUrl = URL.createObjectURL(finalBlob);
+        this.currentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
 
-        // 4. Open the modal
         this.isPreviewModalOpen = true;
+        this.cdr.detectChanges(); // Tell Angular to open the modal
       } else {
         this.uploadError = 'Preview content is empty.';
-        setTimeout(() => (this.uploadError = ''), 3000);
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.uploadError = '';
+          this.cdr.detectChanges();
+        }, 3000);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load document preview:', error);
-      this.uploadError = 'Error loading document preview.';
-      setTimeout(() => (this.uploadError = ''), 3000);
+      const serverMessage = error.error?.message || error.message;
+      //this.uploadError = 'Error loading document preview.';
+      this.uploadError = `Error loading preview: ${serverMessage}`;
+      this.cdr.detectChanges();
+      setTimeout(() => {
+        this.uploadError = '';
+        this.cdr.detectChanges();
+      }, 3000);
     }
   }
 
   public closePreview(): void {
     this.isPreviewModalOpen = false;
     this.currentPreviewUrl = null;
+    this.cdr.detectChanges(); // <--- CRITICAL FIX: Tells Angular to hide the modal NOW
   }
 }
