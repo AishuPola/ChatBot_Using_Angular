@@ -119,8 +119,14 @@
     </p>
 
     <button class="upload-submit" (click)="uploadDocuments()" [disabled]="isUploading">
-      {{ isUploading ? 'Uploading...' : 'Upload' }}
+      <span> {{ isUploading ? 'Uploading...' : 'Upload' }}</span>
       <!-- use ion icon for loading  -->
+      <ion-spinner
+        *ngIf="isUploading"
+        name="crescent"
+        class="btn-spinner"
+        color="primary"
+      ></ion-spinner>
     </button>
 
     <p class="supported">Supported Files: PDF, PNG</p>

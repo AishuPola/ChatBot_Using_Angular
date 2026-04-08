@@ -185,21 +185,21 @@
 }
 
 /* BUTTON */
-.upload-submit {
-  margin-top: 15px;
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(90deg, #1a1b57, #4f46e5);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-}
+// .upload-submit {
+//   margin-top: 15px;
+//   width: 100%;
+//   padding: 12px;
+//   background: linear-gradient(90deg, #1a1b57, #4f46e5);
+//   color: white;
+//   border: none;
+//   border-radius: 25px;
+//   cursor: pointer;
+// }
 
-.upload-submit:disabled {
-  background: #cbd5f5;
-  cursor: not-allowed;
-}
+// .upload-submit:disabled {
+//   background: #cbd5f5;
+//   cursor: not-allowed;
+// }
 
 /* ERROR */
 .error-msg {
@@ -372,4 +372,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.upload-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; /* Adds perfect spacing between the spinner and the text */
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #1a1b57, #4f46e5);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+
+  &:disabled {
+    background: #cbd5f5; /* Note: If you want the gradient to remain but just fade, use opacity: 0.7 instead of changing the background */
+    cursor: not-allowed;
+  }
+
+  /* Target the ionic spinner inside the button */
+  .btn-spinner {
+    width: 20px;
+    height: 20px;
+    color: white; /* Forces the spinner to be white so it stands out against the dark gradient */
+  }
 }

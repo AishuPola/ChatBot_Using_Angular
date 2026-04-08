@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DocumentItem, UploadedMedia } from '../shared/models/document.model';
 import { firstValueFrom } from 'rxjs';
 import { Api } from '../shared/services/api';
@@ -24,6 +24,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   ],
   templateUrl: './document-management.html',
   styleUrl: './document-management.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DocumentManagement {
   constructor(
@@ -424,8 +425,8 @@ export class DocumentManagement {
         // 1. Check if it's an image based on the file extension OR the blob type
         if (
           fileName.endsWith('.png') ||
-          fileName.endsWith('.jpg') ||
-          fileName.endsWith('.jpeg') ||
+          // fileName.endsWith('.jpg') ||
+          // fileName.endsWith('.jpeg') ||
           blob.type.includes('image')
         ) {
           this.currentPreviewType = 'image';
@@ -435,7 +436,7 @@ export class DocumentManagement {
           finalBlob = new Blob([blob], { type: mimeType });
         } else {
           this.currentPreviewType = 'pdf';
-          // CRITICAL FIX: The backend is sending 'application/octet-stream' (which forces a download).
+          //  The backend is sending 'application/octet-stream' (which forces a download).
           // We wrap the raw data in a new Blob and explicitly label it 'application/pdf'.
           finalBlob = new Blob([blob], { type: 'application/pdf' });
         }
@@ -445,7 +446,7 @@ export class DocumentManagement {
         this.currentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
 
         this.isPreviewModalOpen = true;
-        this.cdr.detectChanges(); // Tell Angular to open the modal
+        this.cdr.detectChanges(); // for opening the modal
       } else {
         this.uploadError = 'Preview content is empty.';
         this.cdr.detectChanges();

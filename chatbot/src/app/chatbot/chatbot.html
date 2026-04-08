@@ -1,32 +1,26 @@
 <div class="chat-layout">
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="menu-section">
       <div class="menu-item" (click)="startNewChat()">
         <ion-icon name="create-outline"></ion-icon>
         <span>New chat</span>
       </div>
-
       <div class="menu-item">
         <ion-icon name="search-outline"></ion-icon>
         <span>Search chats</span>
       </div>
-
       <div class="menu-item">
         <ion-icon name="grid-outline"></ion-icon>
         <span>Apps</span>
       </div>
-
       <div class="menu-item">
         <ion-icon name="code-slash-outline"></ion-icon>
         <span>Codex</span>
       </div>
-
       <div class="menu-item">
         <ion-icon name="cube-outline"></ion-icon>
         <span>GPTs</span>
       </div>
-
       <div class="menu-item">
         <ion-icon name="folder-outline"></ion-icon>
         <span>Projects</span>
@@ -35,22 +29,18 @@
 
     <div class="chat-list">
       <div class="title">Your chats</div>
-
       <div class="chat-item">
         <ion-icon name="chatbubble-outline"></ion-icon>
         <span>Environmental Awareness</span>
       </div>
-
       <div class="chat-item">
         <ion-icon name="chatbubble-outline"></ion-icon>
         <span>Mental Health Matters</span>
       </div>
-
       <div class="chat-item">
         <ion-icon name="chatbubble-outline"></ion-icon>
         <span>Urban Living Insights</span>
       </div>
-
       <div class="chat-item">
         <ion-icon name="chatbubble-outline"></ion-icon>
         <span>Social Issues Today</span>
@@ -68,34 +58,17 @@
   <div class="chat-area" [ngClass]="{ 'before-chat': showCenter, 'after-chat': !showCenter }">
     <div class="center-screen" *ngIf="showCenter">
       <h2>Hey, How can I help you today?</h2>
+
+      <div class="greeting-note" *ngIf="showGreetingNote">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        I'm your AI assistant, you can ask any questions where I can help you.
+      </div>
     </div>
-    <div class="greeting-note" *ngIf="showGreetingNote">
-      <!-- <ion-icon name="information-circle-outline"></ion-icon> -->
-      I'm your AI assistant, you can ask any questions where I can help you.
-    </div>
-    <!-- MESSAGES -->
 
     <div class="messages" *ngIf="!showCenter" #chatContainer>
       <div *ngFor="let msg of messages" class="message" [ngClass]="msg.type">
         <div class="message-content">
           <div class="actions" *ngIf="msg.type === 'bot'">
-            <!--  BOT ACTIONS -->
-            <!-- SpeechSynthesis browser api for converting text into audio -->
-            <!-- <button type="button" class="action-icon" (click)="speak(msg.text)" title="Speak">
-              <ion-icon name="volume-high-outline"></ion-icon>
-            </button> -->
-            <!-- added stop for audio. -->
-            <!-- <button
-              type="button"
-              class="action-icon"
-              (click)="speak(msg)"
-              [title]="msg.playing ? 'Stop' : 'Speak'"
-            >
-              <ion-icon
-                [name]="msg.playing ? 'pause-circle-outline' : 'volume-high-outline'"
-              ></ion-icon>
-            </button> -->
-            <!-- for pausing -->
             <button
               type="button"
               class="action-icon"
@@ -106,7 +79,6 @@
                 [name]="msg.playing ? 'pause-circle-outline' : 'volume-high-outline'"
               ></ion-icon>
             </button>
-
             <button type="button" class="action-icon" (click)="copyText(msg)" title="Copy">
               <ion-icon [name]="msg.copied ? 'checkmark-outline' : 'copy-outline'"></ion-icon>
             </button>
@@ -117,13 +89,14 @@
     </div>
 
     <div class="doc-toggles">
-      <!-- TOOLTIP -->
-      <div class="tooltip-wrapper" *ngIf="searchScope === 'none' && showCenter">
-        <div class="tooltip-box">
-          <!-- <ion-icon name="hand-left-outline"></ion-icon> -->
-          Please select a document type to start chatting!
-        </div>
+      <div
+        class="tooltip-wrapper"
+        *ngIf="searchScope === 'none' && showCenter"
+        [ngClass]="showGreetingNote ? 'tooltip-bottom' : 'tooltip-top'"
+      >
+        <div class="tooltip-box">Please select a document type to start chatting!</div>
       </div>
+
       <button
         class="toggle-btn"
         [class.active]="searchScope === 'my-docs'"
@@ -145,17 +118,8 @@
       </button>
     </div>
 
-    <!-- INPUT BOX (ALWAYS OUTSIDE messages) -->
     <div class="input-box">
       <div class="input-wrapper">
-        <!--  Upload -->
-        <!-- <button type="button" class="icon-btn" (click)="fileInput.click()" [disabled]="isLoading">
-          <ion-icon name="cloud-upload-outline"></ion-icon>
-        </button>
-
-        <input type="file" #fileInput (change)="onFileSelected($event)" hidden /> -->
-
-        <!-- ⌨ Input -->
         <input
           class="giving-input"
           [(ngModel)]="userInput"
@@ -170,7 +134,6 @@
           (keydown.enter)="handleGlobalEnter($event)"
         />
 
-        <!--  Mic -->
         <button
           type="button"
           class="icon-btn mic-btn"
@@ -181,7 +144,6 @@
           <ion-icon name="mic-outline"></ion-icon>
         </button>
 
-        <!-- Send -->
         <button
           type="button"
           class="send"
@@ -189,7 +151,6 @@
           [disabled]="isLoading || searchScope === 'none'"
         >
           <div class="custom-spinner" *ngIf="isLoading"></div>
-
           <ion-icon *ngIf="!isLoading" name="enter-outline"></ion-icon>
         </button>
       </div>
