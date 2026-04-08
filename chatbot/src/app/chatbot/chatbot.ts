@@ -75,13 +75,11 @@ export class Chatbot {
         this.showGreetingNote = true;
         sessionStorage.setItem('hasSeenGreetingNote', 'true');
         this.cdr.detectChanges();
-        console.log('Note is now visible on screen!');
 
         // 3. Hide the note after 10 seconds
         setTimeout(() => {
           this.showGreetingNote = false;
           this.cdr.detectChanges();
-          console.log('10 seconds passed. Note is now hidden.');
         }, 10000);
       }, 500);
     } else {

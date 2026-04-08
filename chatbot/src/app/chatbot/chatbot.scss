@@ -138,20 +138,20 @@
 
       top: calc(39% - 37px);
       /* 🔥 KEY: sits between heading & input */
-      left: 50%;
+      left: 54%;
       transform: translateX(-50%);
 
-      background: rgba(30, 41, 59, 0.08);
+      //background: rgba(30, 41, 59, 0.08);
       color: #334155;
       padding: 8px 16px;
-      border-radius: 20px;
+      // border-radius: 20px;
       font-size: 13px;
 
       display: flex;
       align-items: center;
-      gap: 6px;
+      //gap: 6px;
 
-      z-index: 5; /* above background, below tooltip */
+      // z-index: 5; /* above background, below tooltip */
     }
 
     .greeting-note ion-icon {
@@ -245,8 +245,8 @@
         position: absolute;
         // top: -20px; /*  moves above buttons */
         // left: 60%;
-        top: 41px;
-        left: 14%;
+        top: -96px;
+        left: 1%;
         transform: translateX(-50%);
         display: flex;
         justify-content: center;
