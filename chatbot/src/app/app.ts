@@ -9,12 +9,13 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 
 import { HttpClientModule } from '@angular/common/http';
+import { Error } from './shared/components/error/error';
 
 // import { provideTranslate } from '@ngx-translate/core';
 @Component({
   selector: 'app-root',
 
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Error],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

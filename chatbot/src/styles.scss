@@ -1,3 +1,19 @@
+/* Core CSS required for Ionic components to work properly */
+@import '@ionic/angular/css/core.css';
+
+/* Basic CSS for apps built with Ionic */
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils */
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
+
 body {
   height: 100%;
   margin: 0;
@@ -13,61 +29,61 @@ body {
   --text: #1e293b;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
-  z-index: 1000;
-}
+// .overlay {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 100vh;
+//   background: rgba(0, 0, 0, 0.6);
+//   backdrop-filter: blur(3px);
+//   z-index: 1000;
+// }
 
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
+// .modal {
+//   position: fixed;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   background: white;
 
-  border-radius: 12px;
-  z-index: 1001;
-  width: 90%;
-  max-width: 400px;
-  // height: 152px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+//   border-radius: 12px;
+//   z-index: 1001;
+//   width: 90%;
+//   max-width: 400px;
+//   // height: 152px;
+//   text-align: center;
+//   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 
-  .modal-content {
-    h3 {
-      color: #d9534f;
-      margin-bottom: 1rem;
-    }
-    p {
-      color: #666;
-      margin-bottom: 1.5rem;
-    }
-  }
+//   .modal-content {
+//     h3 {
+//       color: #d9534f;
+//       margin-bottom: 1rem;
+//     }
+//     p {
+//       color: #666;
+//       margin-bottom: 1.5rem;
+//     }
+//   }
 
-  .icon-warning {
-    font-size: 3rem;
-    margin-bottom: 10px;
-  }
-}
+//   .icon-warning {
+//     font-size: 3rem;
+//     margin-bottom: 10px;
+//   }
+// }
 
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+// .modal-actions {
+//   display: flex;
+//   justify-content: center;
+//   gap: 10px;
 
-  button {
-    padding: 10px 25px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    background-color: #002d55;
-    color: white;
-    font-weight: bold;
-  }
-}
+//   button {
+//     padding: 10px 25px;
+//     border-radius: 6px;
+//     border: none;
+//     cursor: pointer;
+//     background-color: #002d55;
+//     color: white;
+//     font-weight: bold;
+//   }
+// }

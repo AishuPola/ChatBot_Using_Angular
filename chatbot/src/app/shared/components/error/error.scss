@@ -1,0 +1,72 @@
+.error-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+
+  /* Starts hidden ABOVE the screen */
+  transform: translate(-50%, -100px);
+  opacity: 0;
+  visibility: hidden;
+
+  background: #ef4444; /* Clean, modern red */
+  color: white;
+  min-width: 300px;
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  z-index: 9999; /* Guarantees it stays above modals and navbars */
+
+  /* Smooth drop-down animation */
+  transition:
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  /* This class is added by Angular when errorMessage is not empty */
+  &.show {
+    transform: translate(-50%, 0); /* Drops down into natural position */
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .error-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .warning-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .message-text {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: white;
+    }
+  }
+}

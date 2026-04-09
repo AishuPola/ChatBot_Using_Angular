@@ -224,16 +224,20 @@ export class DocumentManagement {
       //   this.uploadError = 'Please select a document template type.';
       //   return;
       // }// via using ngmodel
-
+      this.cdr.detectChanges();
       const selectedType = this.uploadForm.get('type')?.value;
 
       if (!selectedType) {
         this.uploadError = 'Please select a document template type.';
+        this.isUploading = false;
+        this.cdr.detectChanges();
         return;
       }
 
       if (!this.selectedFiles.length) {
         this.uploadError = 'Please select a file';
+        this.isUploading = false;
+        this.cdr.detectChanges();
         return;
       }
 
@@ -259,8 +263,10 @@ export class DocumentManagement {
       this.cdr.detectChanges();
     } catch (err: any) {
       this.uploadError = err?.error?.message || 'Upload failed';
+      this.cdr.detectChanges();
     } finally {
       this.isUploading = false;
+      this.cdr.detectChanges();
     }
   }
 

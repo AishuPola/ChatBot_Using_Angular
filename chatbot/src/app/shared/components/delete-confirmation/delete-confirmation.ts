@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-delete-confirmation',
-  imports: [CommonModule],
+  imports: [CommonModule, IonicModule],
   templateUrl: './delete-confirmation.html',
   styleUrl: './delete-confirmation.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DeleteConfirmation {
   //We use @Input() because the data is created in the

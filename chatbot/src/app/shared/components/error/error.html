@@ -1,0 +1,10 @@
+<div class="error-toast" [class.show]="errorMessage">
+  <div class="error-content">
+    <ion-icon name="warning-outline" class="warning-icon"></ion-icon>
+    <span class="message-text">{{ errorMessage }}</span>
+  </div>
+
+  <button class="close-btn" (click)="closeError()">
+    <ion-icon name="close-outline"></ion-icon>
+  </button>
+</div>

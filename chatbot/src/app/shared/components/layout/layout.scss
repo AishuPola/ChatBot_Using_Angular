@@ -7,7 +7,7 @@
 
 /* Header and Footer take exactly 10% or a fixed height */
 .header-footer-height {
-  flex: 0 0 10%;
+  // flex: 0 0 10%;
   min-height: 60px; /* Safety: don't let it get too small */
 }
 

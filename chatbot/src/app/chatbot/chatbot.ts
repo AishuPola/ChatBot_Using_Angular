@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { Api } from '../shared/services/api';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
+import { ErrorService } from '../shared/services/error';
 @Component({
   selector: 'app-chatbot',
   imports: [CommonModule, FormsModule],
@@ -40,6 +41,7 @@ export class Chatbot {
     private cdr: ChangeDetectorRef,
     private api: Api,
     private zone: NgZone,
+    private errorService: ErrorService,
   ) {}
 
   ngOnInit() {
@@ -78,17 +80,9 @@ export class Chatbot {
     if (this.searchScope === 'none') {
       this.showTooltip = true;
       this.cdr.detectChanges();
-
-      // Auto-hide the tooltip after 3 seconds
-      // clearTimeout(this.tooltipTimeout);
-      // this.tooltipTimeout = setTimeout(() => {
-      //   this.showTooltip = false;
-      //   this.cdr.detectChanges();
-      // }, 3000);
     }
   }
 
-  // --- ADD THIS NEW FUNCTION ---
   public hideTooltip() {
     this.showTooltip = false;
     this.cdr.detectChanges();

@@ -119,13 +119,13 @@
     </p>
 
     <button class="upload-submit" (click)="uploadDocuments()" [disabled]="isUploading">
-      <span> {{ isUploading ? 'Uploading...' : 'Upload' }}</span>
+      <span> {{ isUploading ? 'Uploading' : 'Upload' }}</span>
       <!-- use ion icon for loading  -->
       <ion-spinner
         *ngIf="isUploading"
         name="crescent"
         class="btn-spinner"
-        color="primary"
+        color="light"
       ></ion-spinner>
     </button>
 

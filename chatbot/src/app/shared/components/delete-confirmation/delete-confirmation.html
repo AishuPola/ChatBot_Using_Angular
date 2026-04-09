@@ -18,7 +18,13 @@
       <button class="cancel-btn" (click)="cancel.emit()">Cancel</button>
 
       <button class="delete-btn" (click)="confirm.emit()" [disabled]="isDeleting">
-        {{ isDeleting ? 'Deleting...' : 'Delete' }}
+        {{ isDeleting ? 'Deleting' : 'Delete' }}
+        <ion-spinner
+          *ngIf="isDeleting"
+          name="crescent"
+          class="btn-spinner"
+          color="light"
+        ></ion-spinner>
       </button>
     </div>
   </div>

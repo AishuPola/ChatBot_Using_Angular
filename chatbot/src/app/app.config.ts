@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { Observable } from 'rxjs';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { provideIonicAngular } from '@ionic/angular/standalone';
 // N'@ngx-translate/http-loader' import is not working in new versions!
 
 // 1. Create our own loader class (This bypasses the TS2554 error entirely)
@@ -25,6 +26,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideIonicAngular({}),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
